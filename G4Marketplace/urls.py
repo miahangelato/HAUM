@@ -27,6 +27,6 @@ urlpatterns = ([
     path('item/', include('item.urls')),
     path('inbox/', include('conversation.urls')),
     path('verification/', include('verify_email.urls')),
-    path('profile/', user_views.profile, name='profile'),
+    path('profile/', include('profile.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
                + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))

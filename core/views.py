@@ -39,10 +39,14 @@ def signup(request):
             print('form is valid')
             user = form.save(commit=False)
             user.is_active = False
-            user.save()
             send_verification_email(request, form)
             activateEmail(request, user, form.cleaned_data.get('email'))
-            return redirect ('/login/')
+            if user.is_active:
+                user.save()
+            else:
+                pass
+
+            return redirect('/login/')
 
         else:
             for error in list(form.errors.values()):
