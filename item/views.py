@@ -6,16 +6,22 @@ from django.urls import reverse_lazy
 
 from item.forms import NewItemForm, EditItemForm
 from item.models import Item, Category
+from profile.models import Location
 
 
 def items(request):
     query = request.GET.get('query', '')
     category_id = request.GET.get('category', 0)
     category = Category.objects.all()
+    location_id = request.GET.get('location', 0)  # Get the selected location_id
+    locations = Location.objects.all()
     items = Item.objects.filter(is_sold=False)
 
     if category_id:
         items = items.filter(category_id=category_id)
+
+    if location_id:
+        items = items.filter(created_by__profile__location_id=location_id)  # Filter by seller's location
 
     if query:
         items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
@@ -24,7 +30,9 @@ def items(request):
         'items': items,
         'query': query,
         'category': category,
-        'category_id': int(category_id)
+        'category_id': int(category_id),
+        'location': locations,
+        'location.id': int(location_id)
     })
 
 

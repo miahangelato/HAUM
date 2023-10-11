@@ -6,46 +6,113 @@
 <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
     <h1 class="text-2xl text-center font-bold py-2">Sign Up</h1>
 
-    <form method ="post" action=".">
+    <form method="post" action=".">
         {% csrf_token %}
-
 
         <div class="mb-3">
             <label class="d-inline-block mb-2">Username</label><br>
             {{ form.username }}
+            {{ form.username.errors }} <!-- Display username field errors -->
+        </div>
+
+        <div class="mb-3">
+            <label class="d-inline-block mb-2">First Name</label><br>
+            {{ form.firstName }}
+            {{ form.firstName.errors }} <!-- Display firstname field errors -->
+        </div>
+
+        <div class="mb-3">
+            <label class="d-inline-block mb-2">Last Name</label><br>
+            {{ form.lastName }}
+            {{ form.lastName.errors }} <!-- Display lastname field errors -->
         </div>
 
         <div class="mb-3">
             <label class="d-inline-block mb-2">Email</label><br>
             {{ form.email }}
+            {{ form.email.errors }} <!-- Display email field errors -->
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 position-relative">
             <label class="d-inline-block mb-2">Password</label><br>
-            {{ form.password1 }}
+            <div class="input-group">
+                <input class="w-full py-4 px-6 rounded-xl pr-12" type="password" id="password" name="password" placeholder="Password">
+                <span class="input-group-btn">
+                    <button type="button" id="passwordToggle" class="align-left hover:text-red-900">
+                        <i id="eyeIcon" class="fas fa-eye"></i>
+                    </button>
+                </span>
+            </div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 position-relative">
             <label class="d-inline-block mb-2">Confirm Password</label><br>
-            {{ form.password2 }}
+            <div class="input-group">
+                <input class="w-full py-4 px-6 rounded-xl pr-12" type="password" id="password2" name="password" placeholder="Confirm Password">
+                <span class="input-group-btn">
+                    <button type="button" id="passwordToggle2" class="align-left hover:text-red-900">
+                        <i id="eyeIcon2" class="fas fa-eye"></i>
+                    </button>
+                </span>
+            </div>
         </div>
 
-        {% if form.errors or form.non_field_errors %}
+        {% if form.non_field_errors %}
             <div class="mb-3 p-6 bg-red-100 rounded-xl">
-                {% for field in form %}
-                    {{ field.errors }}
-                    {{ foo.errors }}
-                {% endfor %}
-                    {{ form.non_field_errors}}
+                {{ form.non_field_errors }} <!-- Display non-field errors -->
             </div>
         {% endif %}
 
-        <button class="py-4 px-8 text-lg bg-red-800 hover:bg-red-950 rounded-xl font-semibold text-white">Submit</button>
 
+        <button class="py-4 px-8 text-lg bg-red-800 hover:bg-red-950 rounded-xl font-semibold text-white">Submit</button>
     </form>
 </div>
+    <script>
+        // Function to toggle password visibility
+        document.addEventListener("DOMContentLoaded", function() {
+            const passwordToggle = document.getElementById("passwordToggle");
+            const passwordToggle2 = document.getElementById("passwordToggle2");
+            const passwordInput = document.querySelector("#password");
+            const passwordInput2 = document.querySelector("#password2");
+            const eyeIcon = document.getElementById("eyeIcon");
+            const eyeIcon2 = document.getElementById("eyeIcon2");
 
+            passwordToggle.addEventListener("click", function() {
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    eyeIcon.classList.remove("fa-eye");
+                    eyeIcon.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput.type = "password";
+                    eyeIcon.classList.remove("fa-eye-slash");
+                    eyeIcon.classList.add("fa-eye");
+                }
+            });
 
+            passwordToggle2.addEventListener("click", function() {
+                if (passwordInput2.type === "password") {
+                    passwordInput2.type = "text";
+                    eyeIcon2.classList.remove("fa-eye");
+                    eyeIcon2.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput2.type = "password";
+                    eyeIcon2.classList.remove("fa-eye-slash");
+                    eyeIcon2.classList.add("fa-eye");
+                }
+            });
+        });
+    </script>
 
+    <style>
+        .input-group {
+            position: relative;
+        }
 
+        .input-group button {
+            position: absolute;
+            right: 50px; /* Adjust this value to control the button's position */
+            top: 50%; /* Adjust this value to vertically center the button */
+            transform: translateY(-50%);
+        }
+    </style>
 {% endblock %}

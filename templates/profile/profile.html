@@ -1,21 +1,62 @@
 {% extends 'core/base.html' %}
+{% block title %}Profile{% endblock title %}
+
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="bg-white p-8 rounded-lg shadow-md">
         <div class="flex items-center">
-            <img class="rounded-full w-16 h-16" src="{{ user.profile.image.url }}" alt="{{ user.username }} profile image">
+           <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+            src="{{ user.profile.image.url }}" alt="Bordered avatar" style="border: 2px solid {{ color_form.color.value }};">
+
+
             <div class="ml-4">
                 <h2 class="text-2xl font-bold">{{ user.username }}</h2>
                 <p class="text-gray-500">{{ user.email }}</p>
             </div>
         </div>
 
+            <div class="mt-2 flex items-center">
+                <!-- Upvote button -->
+                <form method="post" action="{% url 'upvote' user.username %}">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded-full flex items-center">
+                        Upvote <span class="ml-1 text-lg">&#9650;</span>
+                    </button>
+                    <span class="ml-2 text-sm">{{ profile.upvotes }} Upvotes</span>
+                </form>
+
+                <!-- Downvote button -->
+                <form method="post" action="{% url 'downvote' user.username %}">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded-full flex items-center ml-2">
+                        Downvote <span class="ml-1 text-lg">&#9660;</span>
+                    </button>
+                    <span class="ml-2 text-sm">{{ profile.downvotes }} Downvotes</span>
+                </form>
+            </div>
+
         <div class="bg-white p-8 rounded-lg shadow-md">
         {% if user.username != request.user.username %}
-            <legend class="text-lg font-semibold">Profile Info</legend>
-            Username: {{ user.username }} <br>
-            Email: {{ user.email }} <br>
-            Bio: {{ profile.bio }} <br>
+            <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                <legend class="text-xl font-bold mb-3 text-gray-700">Profile Info</legend>
+                <div class="text-gray-700">
+                    <div class="mb-2">
+                        <span class="font-semibold">Username:</span> {{ user.username }}
+                    </div>
+                    <div class="mb-2">
+                        <span class="font-semibold">Email:</span> {{ user.email }}
+                    </div>
+                    <div>
+                        <span class="font-semibold">Bio:</span> {{ profile.bio }}
+                    </div>
+                    <div>
+                        <span class="font-semibold">Location:</span> {{ profile.location }}
+                    </div>
+                    <div>
+                        <span class="font-semibold">Name:</span> {{ profile.firstname }} {{ profile.lastname }}
+                    </div>
+                </div>
+            </div>
 
                 {% if item %}
 
@@ -42,24 +83,84 @@
 
 
         {% else %}
-                <form method="POST" enctype="multipart/form-data" class="mt-4">
+              <form method="POST" enctype="multipart/form-data" class="mt-4">
                 {% csrf_token %}
-                <fieldset class="border-b mb-4">
-                    <legend class="text-lg font-semibold">Profile Info</legend>
-    {#                {{ u_form|crispy }}#}
-                    Username: {{ u_form.username }} <br>
-                    Email: {{ u_form.email }} <br>
-                    Bio: {{ p_form.bio }} <br>
-                    Image: {{ p_form.image }} <br>
 
-    {#                {{ p_form|crispy }}#}
-                </fieldset>
-                <!-- Information Boxes -->
-                <!-- End Information Boxes -->
-                <div class="mt-4">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" type="submit">Update</button>
+
+                <div class="mb-4 w-1/2">
+                    <label for="{{ u_form.username.id_for_label }}" class="block text-gray-600 font-medium">Username:</label>
+                    <input type="text" id="username" name="username" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.username }}">
                 </div>
+
+                  <div class="mb-4 w-1/2">
+                    <label for="{{ p_form.firstname.id_for_label }}" class="block text-gray-600 font-medium">First Name:</label>
+                    <input type="text" id="firstname" name="firstname" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.firstname }}">
+                </div>
+
+                <div class="mb-4 w-1/2">
+                    <label for="{{ p_form.lastname.id_for_label }}" class="block text-gray-600 font-medium">Last Name:</label>
+                    <input type="text" id="lastname" name="lastname" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.lastname }}">
+                </div>
+
+{#                <div class="mb-4 w-1/2">#}
+{#                    <label for="{{ p_form.location.id_for_label }}" class="block text-gray-600 font-medium">Location:</label>#}
+{#                    <select id="location" name="location" class="border border-gray-300 p-2 rounded w-full" required>#}
+{#                        <option value="" {% if not user.profile.location %}selected{% endif %}>Select a Location</option>#}
+{#                        {% for location in locations %}#}
+{#                            <option value="{{ location.id }}" {% if location.id == user.profile.location_id %}selected{% endif %}>#}
+{#                                {{ location.name }}#}
+{#                            </option>#}
+{#                        {% endfor %}#}
+{#                    </select>#}
+{#                </div>#}
+
+                <div class="mb-4 w-1/2">
+                    <label for="{{ p_form.address.id_for_label }}" class="block text-gray-600 font-medium">Address:</label>
+                    <input type="text" id="location" name="location" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.address }}">
+                </div>
+
+
+               <div class="mb-4 w-1/2">
+                    <label for="{{ p_form.profile.bio.id_for_label }}" class="block text-gray-600 font-medium">Bio:</label>
+                    <textarea id="bio" name="bio" class="border border-gray-300 p-2 rounded w-full" required rows="6">{{ user.profile.bio }}</textarea>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="absolute top-0 left-0 m-4">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        {{ color_form.color.label_tag }}
+                        <div class="flex items-center">
+                            <select name="color" class="bg-white border border-gray-300 p-2 rounded">
+                                <option value="#FF0000">Red</option>
+                                <option value="#00FF00">Green</option>
+                                <option value="#0000FF">Blue</option>
+                                <!-- Add more color options as needed -->
+                            </select>
+                            <div class="ml-2" style="width: 30px; height: 30px; background-color: {{ color_form.color.value }};"></div>
+                        </div>
+                    </div>
+                    <button class="bg-red-700 hover:bg-red-900 text-white font-semibold py-2 px-4 rounded" style ="background:{{ color_form.color.value }}" type="submit">Update Color</button>
+                </form>
+
+                  <!-- font_preference.html -->
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_table }}
+                    <button type="submit">Save Font Preference</button>
+                </form>
+
+
+
+                <div class="mb-4 w-1/2">
+                    <label for="{{ p_form.image.id_for_label }}" class="block text-gray-600 font-medium">Profile Image:</label>
+                    <input type="file" id="profile-image" name="image" class="border border-gray-300 p-2 rounded w-full">
+                </div>
+
+
+                <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8" style = "background: {{ color_form.color.value }}" type="submit">Update Profile</button>
             </form>
+
+
         {% endif %}
         </div>
     </div>

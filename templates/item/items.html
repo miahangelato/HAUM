@@ -23,6 +23,17 @@
                 {% endfor %}
             </ul>
 
+             <p class="font-semibold text-xl">Preferred location</p>
+            <ul>
+                {% for location in location %}
+                    <li class="py-2 px-2 rounded-xl{% if location.id == location_id %} bg-gray-200 {% endif %}">
+                        <a href="{% url 'item:items' %}?query={{ query }}&category={{ category_id }}&location={{ location.id }}">{{ location.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+
+
             <hr class ="my-6">
 
             <p class="font-semibold text-xl">Clear filters</p>

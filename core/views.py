@@ -30,6 +30,13 @@ def index(request):
 def contact(request):
     return render(request, 'core/contact.html')
 
+def about(request):
+    return render(request, 'core/about.html')
+def terms_of_use(request):
+    return render(request, 'core/terms_of_use.html')
+def privacy_policy(request):
+    return render(request, 'core/privacy_policy.html')
+
 
 def signup(request):
     if request.method == 'POST':

@@ -11,20 +11,30 @@ class LoginForm(AuthenticationForm):
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
 
-    password = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder': 'Password',
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
+    # password = forms.CharField(widget=forms.TextInput(attrs={
+    #     'placeholder': 'Password',
+    #     'class': 'w-full py-4 px-6 rounded-xl'
+    # }))
 
 
 
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'firstName', 'lastName', 'email', 'password1', 'password2']
 
     username = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'Username',
+        'class': 'w-full py-4 px-6 rounded-xl'
+    }))
+
+    firstName = forms.CharField(widget=forms.TextInput(attrs={
+        'placeholder': 'First Name',
+        'class': 'w-full py-4 px-6 rounded-xl'
+    }))
+
+    lastName = forms.CharField(widget=forms.TextInput(attrs={
+        'placeholder': 'Last Name',
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
 
@@ -53,3 +63,11 @@ class SignupForm(UserCreationForm):
             raise forms.ValidationError('Email is not a valid HAU email address.')
 
         return email
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("An account with this username already exists.")
+
+        return username
