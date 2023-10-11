@@ -39,7 +39,7 @@
     {#                        <a href="{% url 'choose_color' %}" class="text-lg font-semibold hover:text-gray-500" style="background: {{ user.profile.color }}>Customize</a>#}
                             <a href="{% url 'item:new_item' %}" class="text-lg font-semibold hover:text-gray-500">New Item</a>
                             <a href="{% url 'item:items' %}" class="text-lg font-semibold hover:text-gray-500">Browse</a>
-                            <a href="{% url 'conversation:inbox' %}" class="px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-white-900" style="background:{{ color_form.color.value }}">Inbox</a>
+                            <a href="{% url 'conversation:inbox' %}" class="px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-900" style="background:{{ color_form.color.value }}">Inbox</a>
                             <a href="{% url 'profile' request.user.username %}" class="px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-900" style="background: {{ color_form.color.value }}">Profile</a>
                             <a href="{% url 'dashboard:index_d' %}" class="px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-900" style="background: {{ color_form.color.value }}">Dashboard</a>
                              <a href="{% url 'logout' %}" class="px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-900" style="background: {{ color_form.color.value }}">Logout</a>

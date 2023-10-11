@@ -102,17 +102,17 @@
                     <input type="text" id="lastname" name="lastname" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.lastname }}">
                 </div>
 
-{#                <div class="mb-4 w-1/2">#}
-{#                    <label for="{{ p_form.location.id_for_label }}" class="block text-gray-600 font-medium">Location:</label>#}
-{#                    <select id="location" name="location" class="border border-gray-300 p-2 rounded w-full" required>#}
-{#                        <option value="" {% if not user.profile.location %}selected{% endif %}>Select a Location</option>#}
-{#                        {% for location in locations %}#}
-{#                            <option value="{{ location.id }}" {% if location.id == user.profile.location_id %}selected{% endif %}>#}
-{#                                {{ location.name }}#}
-{#                            </option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                </div>#}
+                <div class="mb-4 w-1/2">
+                    <label for="{{ p_form.location.id_for_label }}" class="block text-gray-600 font-medium">Location:</label>
+                    <select id="location" name="location" class="border border-gray-300 p-2 rounded w-full" required>
+                        <option value="" {% if not user.profile.location %}selected{% endif %}>Select a Location</option>
+                        {% for location in locations %}
+                            <option value="{{ location.id }}" {% if location.id == user.profile.location_id %}selected{% endif %}>
+                                {{ location.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
                 <div class="mb-4 w-1/2">
                     <label for="{{ p_form.address.id_for_label }}" class="block text-gray-600 font-medium">Address:</label>
