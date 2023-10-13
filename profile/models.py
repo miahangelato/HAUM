@@ -14,7 +14,7 @@ class Location(models.Model):
 class Profile(models.Model):
     # color = models.CharField(max_length=7, blank=True, null=True)
     color = ColorField(default='#0000000')
-    font_preference = models.CharField(max_length=50, default='Font1')
+    font_preference = models.CharField(max_length=50, default='Young Serif') # Changed default font to Young Serif
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     bio = models.CharField(max_length=200, null=True, blank=True)
