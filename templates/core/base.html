@@ -6,22 +6,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css?family=Font1|Font2|Font3&display=swap" rel="stylesheet">
-    <style>
-        /* In your CSS, define different font styles */
-        body.font1 {
-            font-family: 'Font1', sans-serif; /* Default font style */
-        }
-
-        /* Apply the user's selected font style */
-        body.font2 {
-            font-family: 'Font2', sans-serif;
-        }
-
-        body.font3 {
-            font-family: 'Font3', sans-serif;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css?family={{ user.profile.font_preference }}" rel="stylesheet">
+{##}
+{##}
+{##}
+{#    <style>#}
+{#        /* In your CSS, define different font styles */#}
+{#        body.font1 {#}
+{#            font-family: 'Font1', sans-serif; /* Default font style */#}
+{#        }#}
+{##}
+{#        /* Apply the user's selected font style */#}
+{#        body.font2 {#}
+{#            font-family: 'Font2', sans-serif;#}
+{#        }#}
+{##}
+{#        body.font3 {#}
+{#            font-family: 'Font3', sans-serif;#}
+{#        }#}
+{#    </style>#}
+{#Removed this code block since it is not being utilized#}
     <title>{% block title %}{% endblock title %} | HAUMarketplace</title>
 </head>
 
