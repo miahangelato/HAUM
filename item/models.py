@@ -21,9 +21,20 @@ class Item(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='items', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='item_images', blank=True, null=True)
+    # price_range = models.ForeignKey('PriceRange', related_name='items', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ['name']
 
     def __str__(self):
         return self.name
+
+# class PriceRange(models.Model):
+#     name = models.CharField(max_length=255)
+#     min_price = models.FloatField()
+#     max_price = models.FloatField()
+#
+#     def __str__(self):
+#         return self.name
+
+
