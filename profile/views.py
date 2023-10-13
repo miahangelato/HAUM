@@ -78,33 +78,38 @@ def profile(request, username):
 
     return render(request, 'profile/profile.html', context)
 
-
+# Upvote view
 @login_required
 def upvote(request, username):
     user = request.user
     target_user = User.objects.get(username=username)
     target_profile = Profile.objects.get(user=target_user)
 
-    if user != target_user:
-        try:
-            user_vote, created = UserVote.objects.get_or_create(voter=user, profile=target_profile)
-
-            if created or not user_vote.is_upvote:
-                # If the vote is new or if it was a downvote, switch to an upvote
-                if not created:
-                    user_vote.is_upvote = True
-                    user_vote.save()
-
-                target_profile.upvotes += 1
-                target_profile.downvotes -= 1  # Decrement downvotes if changing from downvote to upvote
+    try:
+        user_vote = UserVote.objects.get(voter=user, profile=target_profile)
+        if user_vote.is_upvote:
+            # The user has upvoted, so remove the vote
+            user_vote.delete()
+            if target_profile.upvotes > 0:  # Ensure upvotes is not negative
+                target_profile.upvotes -= 1
                 target_profile.save()
-                messages.success(request, f'You have upvoted {target_user.username}!')
-            else:
-                messages.error(request, "You have already upvoted this profile.")
-        except IntegrityError:
-            messages.error(request, "An error occurred while processing your upvote.")
-    else:
-        messages.error(request, "You can't upvote your own profile!")
+            messages.success(request, f'You have removed your upvote for {target_user.username}!')
+        else:
+            # The user has downvoted, so change the vote to upvote
+            user_vote.is_upvote = True
+            user_vote.save()
+            if target_profile.downvotes > 0:  # Ensure downvotes is not negative
+                target_profile.downvotes -= 1
+            target_profile.upvotes += 1
+            target_profile.save()
+            messages.success(request, f'You have changed your vote to an upvote for {target_user.username}!')
+    except UserVote.DoesNotExist:
+        # The user hasn't voted before, so create a new upvote
+        user_vote = UserVote(voter=user, profile=target_profile, is_upvote=True)
+        user_vote.save()
+        target_profile.upvotes += 1
+        target_profile.save()
+        messages.success(request, f'You have upvoted {target_user.username}!')
 
     return redirect('profile', username=username)
 
@@ -115,26 +120,30 @@ def downvote(request, username):
     target_user = User.objects.get(username=username)
     target_profile = Profile.objects.get(user=target_user)
 
-    if user != target_user:
-        try:
-            user_vote, created = UserVote.objects.get_or_create(voter=user, profile=target_profile)
-
-            if created or user_vote.is_upvote:
-                # If the vote is new or if it was an upvote, switch to a downvote
-                if not created:
-                    user_vote.is_upvote = False
-                    user_vote.save()
-
-                target_profile.downvotes += 1
-                target_profile.upvotes -= 1  # Decrement upvotes if changing from upvote to downvote
+    try:
+        user_vote = UserVote.objects.get(voter=user, profile=target_profile)
+        if not user_vote.is_upvote:
+            # The user has downvoted, so remove the vote
+            user_vote.delete()
+            if target_profile.downvotes > 0:  # Ensure downvotes is not negative
+                target_profile.downvotes -= 1
                 target_profile.save()
-                messages.success(request, f'You have downvoted {target_user.username}!')
-            else:
-                messages.error(request, "You have already downvoted this profile.")
-        except IntegrityError:
-            messages.error(request, "An error occurred while processing your downvote.")
-    else:
-        messages.error(request, "You can't downvote your own profile!")
+            messages.success(request, f'You have removed your downvote for {target_user.username}!')
+        else:
+            # The user has upvoted, so change the vote to downvote
+            user_vote.is_upvote = False
+            user_vote.save()
+            if target_profile.upvotes > 0:  # Ensure upvotes is not negative
+                target_profile.upvotes -= 1
+            target_profile.downvotes += 1
+            target_profile.save()
+            messages.success(request, f'You have changed your vote to a downvote for {target_user.username}!')
+    except UserVote.DoesNotExist:
+        # The user hasn't voted before, so create a new downvote
+        user_vote = UserVote(voter=user, profile=target_profile, is_upvote=False)
+        user_vote.save()
+        target_profile.downvotes += 1
+        target_profile.save()
+        messages.success(request, f'You have downvoted {target_user.username}!')
 
     return redirect('profile', username=username)
-

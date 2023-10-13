@@ -43,25 +43,34 @@ def privacy_policy(request):
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
-        print('requiett method')
         if form.is_valid():
-            print('form is valid')
             user = form.save(commit=False)
             user.is_active = False
-            send_verification_email(request, form)
-            activateEmail(request, user, form.cleaned_data.get('email'))
-            if user.is_active:
-                user.save()
-            else:
-                pass
+            user.save()
 
+            # Send email for account activation
+            current_site = get_current_site(request)
+            mail_subject = 'Activate your account.'
+            message = render_to_string('core/acc_active_email.html', {
+                'user': user.username,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': default_token_generator.make_token(user),  # Use default token generator
+                'protocol': 'https' if request.is_secure() else 'http'
+            })
+            email = EmailMessage(mail_subject, message, settings.EMAIL_HOST_USER, to=[user.email])
+            email.send()
+
+            messages.success(request, 'Please confirm your email address to complete the registration')
             return redirect('/login/')
-
         else:
-            for error in list(form.errors.values()):
-                messages.error(request, error)
-    return render(request, 'core/signup.html', {'form': SignupForm()})
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = SignupForm()
 
+    return render(request, 'core/signup.html', {'form': form})
 
 def activateEmail(request, user, email):
     current_site = get_current_site(request)
