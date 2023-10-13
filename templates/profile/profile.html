@@ -90,10 +90,16 @@
                 {% csrf_token %}
 
 
+              <div class="mb-4">
+                    <p class="font-semibold">Upvotes: {{ user.profile.upvotes }}</p>
+                    <p class="font-semibold">Downvotes: {{ user.profile.downvotes }}</p>
+                </div>
+
                 <div class="mb-4 w-1/2">
                     <label for="{{ u_form.username.id_for_label }}" class="block text-gray-600 font-medium">Username:</label>
                     <input type="text" id="username" name="username" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.username }}">
                 </div>
+
 
                   <div class="mb-4 w-1/2">
                     <label for="{{ p_form.firstname.id_for_label }}" class="block text-gray-600 font-medium">First Name:</label>
