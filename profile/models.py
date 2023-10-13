@@ -26,9 +26,10 @@ class Profile(models.Model):
     downvotes = models.PositiveIntegerField(default=0)
 
 
-    def str(self):
+    def __str__(self):
         return f'{self.user.username} Profile'
     # display nya username profile
+    #Fixed this function, walang double underscore ung str (arnaz)
 
     def save(self, *args, **kwargs):
         super(Profile, self).save(*args, **kwargs)
