@@ -12,6 +12,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from G4Marketplace import settings
 from item.models import Category, Item
 from .forms import SignupForm
+from .models import Contact
 from .tokens import account_activation_token
 from verify_email.email_handler import send_verification_email
 
@@ -31,6 +32,15 @@ def index(request):
     return render(request, 'core/index.html', context)
 
 def contact(request):
+    if request.method=="POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        comment = request.POST.get("comment")
+        query= Contact(name=name, email=email, subject=subject, comment=comment)
+        query.save()
+        # messages.info(request, "Thanks For Reaching Us! We will get back you soon...")
+        return redirect('/contact')
     return render(request, 'core/contact.html')
 
 def about(request):
@@ -56,7 +66,7 @@ def signup(request):
                 'user': user.username,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': default_token_generator.make_token(user),  # Use default token generator
+                # 'token': default_token_generator.make_token(user),  # Use default token generator
                 'protocol': 'https' if request.is_secure() else 'http'
             })
             email = EmailMessage(mail_subject, message, settings.EMAIL_HOST_USER, to=[user.email])
