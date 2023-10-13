@@ -14,19 +14,24 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['color','image', 'bio', 'firstname', 'lastname', 'location', 'address']
+        fields = ['firstname', 'lastname', 'bio', 'address', 'location', 'image', 'color', 'font_preference']
 
+
+#Color Preference Form can be deleted since the color field is already in the ProfileUpdateForm
 class ColorPreferenceForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['color']
 
+
 class FontPreferenceForm(forms.ModelForm):
     FONT_CHOICES = (
-        ('Font1', 'Young Serif'),
-        ('Font2', 'Robotto Slab'),
-        ('Font3', 'Font 3'),
+        ('Young Serif', 'Young Serif'),
+        ('Roboto Slab', 'Roboto Slab'),
+        ('Noto Sans JP', 'Noto Sans JP'),
+        ('Yuji Hentaigana Akari', 'Yuji Hentaigana Akari'),
     )
+    # Replaced the font field with choices added new font option
 
     # Add the font field with choices
     font_preference = forms.ChoiceField(
@@ -34,6 +39,7 @@ class FontPreferenceForm(forms.ModelForm):
         required=True,
         widget=forms.Select(attrs={'class': 'form-control'}),
     )
+
     class Meta:
         model = Profile
         fields = ['font_preference']
