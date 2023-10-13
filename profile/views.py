@@ -22,13 +22,15 @@ def profile(request, username):
         p_form = ProfileUpdateForm(request.POST,
                                    request.FILES,
                                    instance=request.user.profile)
-        color_form = ColorPreferenceForm(request.POST, instance=profile)
+        # color_form = ColorPreferenceForm(request.POST, instance=profile)
         form = FontPreferenceForm(request.POST, instance=request.user.profile)
 
         if u_form.is_valid() and p_form.is_valid() and color_form.is_valid() and form.is_valid():
+            # request.user.save()
             u_form.save()
             p_form.save()
-            color_form.save()
+            profile.color = form.cleaned_data['color']
+            # color_form.save()
             form.save()
             messages.success(request, f'Your account has been updated!')
             return redirect('profile', request.user.username)
@@ -41,6 +43,7 @@ def profile(request, username):
         print(profile)
         u_form = UserUpdateForm(instance=user)
         p_form = ProfileUpdateForm(instance=profile)
+
 
     user_profile_color = profile.color
     is_own_profile = user == request.user
@@ -63,10 +66,9 @@ def profile(request, username):
         'item': item,
         'is_own_profile': is_own_profile,
         'user_profile_color': user_profile_color,
-        'color_form': ColorPreferenceForm(instance=profile),
         'form': FontPreferenceForm(instance=request.user.profile),
         'locations': locations,
-        # 'color_form': color_form
+        'color_form': color_form
 
     }
 

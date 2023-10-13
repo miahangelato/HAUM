@@ -14,7 +14,7 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['image', 'bio', 'firstname', 'lastname', 'location', 'address']
+        fields = ['color','image', 'bio', 'firstname', 'lastname', 'location', 'address']
 
 class ColorPreferenceForm(forms.ModelForm):
     class Meta:

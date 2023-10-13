@@ -20,10 +20,12 @@ from verify_email.email_handler import send_verification_email
 # Create your views here.
 def index(request):
     items = Item.objects.filter(is_sold=False)[0:6]
+    user_color = request.session.get('user_color', None)
     categories = Category.objects.all()
     context = {
         'items': items,
-        'categories': categories
+        'categories': categories,
+        'user_color': user_color if user_color else 'primary'
     }
     return render(request, 'core/index.html', context)
 

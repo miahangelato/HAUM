@@ -6,7 +6,7 @@
     <div class="bg-white p-8 rounded-lg shadow-md">
         <div class="flex items-center">
            <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-            src="{{ user.profile.image.url }}" alt="Bordered avatar" style="border: 2px solid {{ color_form.color.value }};">
+            src="{{ user.profile.image.url }}" alt="Bordered avatar" style="border: 2px solid {{ user.profile.color }};">
 
 
             <div class="ml-4">
@@ -104,7 +104,7 @@
 
                 <div class="mb-4 w-1/2">
                     <label for="{{ p_form.location.id_for_label }}" class="block text-gray-600 font-medium">Location:</label>
-                    <select id="location" name="location" class="border border-gray-300 p-2 rounded w-full" required>
+                    <select id="location" name="location" class="border border-gray-300 p-2 rounded w-full">
                         <option value="" {% if not user.profile.location %}selected{% endif %}>Select a Location</option>
                         {% for location in locations %}
                             <option value="{{ location.id }}" {% if location.id == user.profile.location_id %}selected{% endif %}>
@@ -125,22 +125,57 @@
                     <textarea id="bio" name="bio" class="border border-gray-300 p-2 rounded w-full" required rows="6">{{ user.profile.bio }}</textarea>
                 </div>
 
-                <form method="POST" enctype="multipart/form-data" class="absolute top-0 left-0 m-4">
+{#                <form method="POST" enctype="multipart/form-data" class="absolute top-0 left-0 m-4">#}
+{#                    {% csrf_token %}#}
+{#                    <div class="mb-4">#}
+{#                        {{ color_form.color.label_tag }}#}
+{#                        <div class="flex items-center">#}
+{#                            <select name="color" class="bg-white border border-gray-300 p-2 rounded">#}
+{#                                <option value="#FF0000">Red</option>#}
+{#                                <option value="#00FF00">Green</option>#}
+{#                                <option value="#0000FF">Blue</option>#}
+{#                                <!-- Add more color options as needed -->#}
+{#                            </select>#}
+{#                            <div class="ml-2" style="width: 30px; height: 30px; background-color: {{ color_form.color.value }};"></div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <button class="bg-red-700 hover:bg-red-900 text-white font-semibold py-2 px-4 rounded" style ="background:{{ color_form.color.value }}" type="submit">Update Color</button>#}
+{#                </form>#}
+
+{#              <h1>Color Picker Example</h1>#}
+{##}
+{#                <form>#}
+{#                    <label for="color">Choose a color:</label>#}
+{#                    <input type="color" id="color" name="color" value="#FF0000">#}
+{#                    <input type="submit" value="Submit">#}
+{##}
+{##}
+{#                </form>#}
+{#<f#}
+{#            <h1>Select a Color</h1>#}
+{##}
+{#                <!-- Create checkboxes for color options -->#}
+{#                <label class="color-option" style="background-color: #FF0000">#}
+{#                    <input type="radio" name="color" value="#FF0000"> Red#}
+{#                </label>#}
+{##}
+{#                <label class="color-option" style="background-color: #00FF00">#}
+{#                    <input type="radio" name="color" value="#00FF00"> Green#}
+{#                </label>#}
+{##}
+{#                <label class="color-option" style="background-color: #0000FF">#}
+{#                    <input type="radio" name="color" value="#0000FF"> Blue#}
+{#                </label>#}
+{#                <button id="submit-button">Submit</button>#}
+
+              <form method="post">
                     {% csrf_token %}
-                    <div class="mb-4">
-                        {{ color_form.color.label_tag }}
-                        <div class="flex items-center">
-                            <select name="color" class="bg-white border border-gray-300 p-2 rounded">
-                                <option value="#FF0000">Red</option>
-                                <option value="#00FF00">Green</option>
-                                <option value="#0000FF">Blue</option>
-                                <!-- Add more color options as needed -->
-                            </select>
-                            <div class="ml-2" style="width: 30px; height: 30px; background-color: {{ color_form.color.value }};"></div>
-                        </div>
-                    </div>
-                    <button class="bg-red-700 hover:bg-red-900 text-white font-semibold py-2 px-4 rounded" style ="background:{{ color_form.color.value }}" type="submit">Update Color</button>
+                    <!-- Display and allow the user to select a color -->
+                    <label for="{{ form.color.id_for_label }}">Choose a color:</label>
+                    <input type="color" id="color" name="color" value="{{ user.profile.color }}">
+                    <input type="submit" value="Submit">
                 </form>
+
 
                   <!-- font_preference.html -->
                 <form method="post">
@@ -157,7 +192,7 @@
                 </div>
 
 
-                <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8" style = "background: {{ color_form.color.value }}" type="submit">Update Profile</button>
+                <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8" style = "background: {{ user.profile.color }}" type="submit">Update Profile</button>
             </form>
 
 
@@ -165,3 +200,19 @@
         </div>
     </div>
 {% endblock content %}
+<script>
+        // JavaScript code to handle color selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const submitButton = document.getElementById('submit-button');
+
+            submitButton.addEventListener('click', function() {
+                const selectedColor = document.querySelector('input[name="color"]:checked');
+
+                if (selectedColor) {
+                    alert('Selected color: ' + selectedColor.value);
+                } else {
+                    alert('Please select a color.');
+                }
+            });
+        });
+    </script>
