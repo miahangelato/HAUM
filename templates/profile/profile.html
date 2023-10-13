@@ -115,8 +115,10 @@
                 </div>
 
                 <div class="mb-4 w-1/2">
+
                     <label for="{{ p_form.address.id_for_label }}" class="block text-gray-600 font-medium">Address:</label>
-                    <input type="text" id="location" name="location" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.address }}">
+{#                        Change ID and Name from location to address#}
+                    <input type="text" id="address" name="address" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.address }}">
                 </div>
 
 
@@ -124,6 +126,19 @@
                     <label for="{{ p_form.profile.bio.id_for_label }}" class="block text-gray-600 font-medium">Bio:</label>
                     <textarea id="bio" name="bio" class="border border-gray-300 p-2 rounded w-full" required rows="6">{{ user.profile.bio }}</textarea>
                 </div>
+                {# Removed Color and Font from separated <form> #}
+                {# Included them from the original form #}
+                {# To allow a single submit button to work #}
+                <div class="mb-4 w-1/2">
+                    <label for="{{ form.color.id_for_label }}">Choose a color:</label>
+                    <input type="color" id="color" name="color" value="{{ user.profile.color }}">
+                </div>
+
+                <div class="mb-4 w-1/2">
+                    {{ form.as_table }}
+                </div>
+
+
 
 {#                <form method="POST" enctype="multipart/form-data" class="absolute top-0 left-0 m-4">#}
 {#                    {% csrf_token %}#}
@@ -168,21 +183,20 @@
 {#                </label>#}
 {#                <button id="submit-button">Submit</button>#}
 
-              <form method="post">
-                    {% csrf_token %}
-                    <!-- Display and allow the user to select a color -->
-                    <label for="{{ form.color.id_for_label }}">Choose a color:</label>
-                    <input type="color" id="color" name="color" value="{{ user.profile.color }}">
-                    <input type="submit" value="Submit">
-                </form>
-
-
+{#              <form method="post">#}
+{#                    {% csrf_token %}#}
+{#                    <!-- Display and allow the user to select a color -->#}
+{##}
+{#                    <input type="submit" value="Submit">#}
+{#              </form>#}
+{##}
+{##}
                   <!-- font_preference.html -->
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_table }}
-                    <button type="submit">Save Font Preference</button>
-                </form>
+{#                <form method="post">#}
+{#                    {% csrf_token %}#}
+{##}
+{#                    <input type="submit" value="Submit">#}
+{#                </form>#}
 
 
 
