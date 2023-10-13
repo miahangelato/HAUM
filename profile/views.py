@@ -15,26 +15,27 @@ def profile(request, username):
     profile = Profile.objects.get(user=user)
     color_form = ColorPreferenceForm(instance=profile)
     locations = Location.objects.all()
-
+    font_form = FontPreferenceForm(instance=request.user.profile)
 
     if request.method == 'POST':
+        print("post method")
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
+        p_form = ProfileUpdateForm(request.POST, request.FILES,
                                    instance=request.user.profile)
+        # print(request.POST)
         # color_form = ColorPreferenceForm(request.POST, instance=profile)
-        form = FontPreferenceForm(request.POST, instance=request.user.profile)
-
-        if u_form.is_valid() and p_form.is_valid() and color_form.is_valid() and form.is_valid():
+        # Removed the color form. Not needed since it is being called from the p_form
+        font_form = FontPreferenceForm(request.POST, instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid() and font_form.is_valid():
             # request.user.save()
+            print("valid form")
             u_form.save()
             p_form.save()
-            profile.color = form.cleaned_data['color']
+            font_form.save()
+            # # profile.color = form.cleaned_data['color']
             # color_form.save()
-            form.save()
             messages.success(request, f'Your account has been updated!')
             return redirect('profile', request.user.username)
-
     else:
         user = User.objects.get(username=username)
         form = FontPreferenceForm(instance=request.user.profile)
@@ -66,13 +67,17 @@ def profile(request, username):
         'item': item,
         'is_own_profile': is_own_profile,
         'user_profile_color': user_profile_color,
-        'form': FontPreferenceForm(instance=request.user.profile),
+
+        # Instantiating the font_form in the start of the function
+        'form': font_form,
+
         'locations': locations,
         'color_form': color_form
 
     }
 
     return render(request, 'profile/profile.html', context)
+
 
 @login_required
 def upvote(request, username):
