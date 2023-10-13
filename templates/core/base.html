@@ -1,54 +1,38 @@
 <!DOCTYPE html>
 {% load static %}
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css?family={{ user.profile.font_preference }}" rel="stylesheet">
-{##}
-{##}
-{##}
-{#    <style>#}
-{#        /* In your CSS, define different font styles */#}
-{#        body.font1 {#}
-{#            font-family: 'Font1', sans-serif; /* Default font style */#}
-{#        }#}
-{##}
-{#        /* Apply the user's selected font style */#}
-{#        body.font2 {#}
-{#            font-family: 'Font2', sans-serif;#}
-{#        }#}
-{##}
-{#        body.font3 {#}
-{#            font-family: 'Font3', sans-serif;#}
-{#        }#}
-{#    </style>#}
-{#Removed this code block since it is not being utilized#}
+    <link rel="icon" href="{% static 'haumlogo.png' %}">
     <title>{% block title %}{% endblock title %} | HAUMarketplace</title>
 </head>
 
 <div style="font-family: {{ user.profile.font_preference }}">
     <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200 bg-{{ user.profile.color }}">
-        <a href="/" class="text-xl font-semibold">HAUM</a>
+        <a href="/" class="text-xl font-bold" style="font: {{ user.profile.color}}; font-size: 30px">H A U M</a>
 
         <div class="space-x-6">
             {% if request.user.is_authenticated %}
                 <div class="container-fluid">
-                    <a href="{% url 'item:new_item' %}" class="text-lg font-semibold hover:text-gray-500">New Item</a>
-                    <a href="{% url 'item:items' %}" class="text-lg font-semibold hover:text-gray-500">Browse</a>
+                    <a href="{% url 'item:new_item' %}" class="px-6 py-3 text-lg font-semibold text-white rounded-xl"
+                       style="background: {{ user.profile.color}}">New Items</a>
+                    <a href="{% url 'item:items' %}" class="px-6 py-3 text-lg font-semibold text-white rounded-xl"
+                       style="background: {{ user.profile.color}}">Browse</a>
                     <a href="{% url 'conversation:inbox' %}"
-                       class="px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-900"
-                       style="background: {{ user.profile.color}}">Inbox</a>
+                       class="px-6 py-3 text-lg font-semibold text-white rounded-xl"
+                       style="background: {{ user.profile.color}}">My Inbox</a>
                     <a href="{% url 'profile' request.user.username %}"
-                       class="px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-900"
-                       style="background: {{ user.profile.color }}">Profile</a>
+                       class="px-6 py-3 text-lg font-semibold text-white rounded-xl"
+                       style="background: {{ user.profile.color }}">My Profile</a>
                     <a href="{% url 'dashboard:index_d' %}"
-                       class="px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-900"
-                       style="background: {{ user.profile.color }}">Dashboard</a>
+                       class="px-6 py-3 text-lg font-semibold text-white rounded-xl"
+                       style="background: {{ user.profile.color }}">My Dashboard</a>
                     <a href="{% url 'logout' %}"
-                       class="px-6 py-3 text-lg font-semibold text-white rounded-xl hover:bg-red-900"
+                       class="px-6 py-3 text-lg font-semibold text-white rounded-xl"
                        style="background: {{ user.profile.color }}">Logout</a>
                 </div>
             {% else %}
@@ -70,19 +54,19 @@
             <p class="text-white">HAUMarketplace is a platform for students to buy and sell items to each other.</p>
         </div>
 
-        <div class="w-1/3">
+        <div class="w-13">
             <h3 class="mb-5 text-xl font-semibold text-white">Menu</h3>
+
             <ul class="space-y-2">
                 <li><a href="{% url 'about' %}" class="text-lg text-white hover:text-teal-700">About</a></li>
                 <li><a href="{% url 'contact' %}" class="text-lg text-white hover:text-teal-700">Contact</a></li>
-                <li><a href="{% static 'static_root/privacy policy/GROUP4_FINALIZED_PROPOSAL.pdf' %}"
+                <li><a href="{% static 'static_root/privacy_policy/GROUP4_FINALIZED_PROPOSAL.pdf' %}"
                        class="text-lg text-white hover:text-teal-700" target="_blank">Privacy policy</a></li>
-                <li><a href="{% static 'static_root/privacy policy/GROUP4_FINALIZED_PROPOSAL.pdf' %}"
+                <li><a href="{% static 'static_root/privacy_policy/GROUP4_FINALIZED_PROPOSAL.pdf' %}"
                        class="text-lg text-white hover:text-teal-700" target="_blank">Term of use</a></li>
             </ul>
         </div>
     </footer>
 </div>
-</body>
 
 </html>
