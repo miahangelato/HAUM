@@ -7,7 +7,7 @@
         <div class ="col-span-1">
             <form method="get" action="{% url 'item:items' %}">
                 <input name="query" class="w-full py-4 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search for items">
-                <button class="mt-2 py-4 px-8 text-lg bg-red-800 text-white rounded-xl">Search</button>
+                <button class="mt-2 py-4 px-8 text-lg text-white rounded-xl" style="background: {{ user.profile.color }}">Search</button>
             </form>
 
             <hr class="my-6">
@@ -25,7 +25,7 @@
             <ul>
                 {% for price_range in price_ranges %}
                     <li class="py-2 px-2 rounded-xl{% if price_range.id == selected_price_range %} bg-gray-200 {% endif %}">
-                    <a href="{% url 'item:items' %}?query={{ query }}&category={{ category_id }}&location={{ location_id }}&price_range={{ price_range.id }}">{{ price_range.name }}</a>
+                    <a href="{% url 'item:items' %}?query={{ query }}&price_range={{ price_range.id }}">{{ price_range.name }}</a>
                 </li>
                 {% endfor %}
             </ul>

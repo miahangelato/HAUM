@@ -29,12 +29,13 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
-# class PriceRange(models.Model):
-#     name = models.CharField(max_length=255)
-#     min_price = models.FloatField()
-#     max_price = models.FloatField()
-#
-#     def __str__(self):
-#         return self.name
+class PriceRange(models.Model):
+    name = models.CharField(max_length=255)
+    min_price = models.FloatField()
+    max_price = models.FloatField()
+
+    def __str__(self):
+        return self.name
+
 
 

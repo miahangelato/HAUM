@@ -52,7 +52,7 @@ class Profile(models.Model):
 class UserVote(models.Model):
     voter = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    is_upvote = models.BooleanField(default=True)  # True for upvote, False for downvote
+    is_upvote = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('voter', 'profile')

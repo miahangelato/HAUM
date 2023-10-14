@@ -15,8 +15,34 @@
             </div>
         </div>
 
-             <div class="mt-2 flex items-center">
-                {% if not is_own_profile %}
+{#             <div class="mt-2 flex items-center">#}
+{#                {% if not is_own_profile %}  #}
+{#                     If the profile is not the user's own profile#}
+{#                    <!-- Upvote button -->#}
+{#                    <form method="post" action="{% url 'upvote' user.username %}">#}
+{#                        {% csrf_token %}#}
+{#                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded-full flex items-center">#}
+{#                            Upvote <span class="ml-1 text-lg">&#9650;</span>#}
+{#                        </button>#}
+{#                        <span class="ml-2 text-sm">{{ profile.upvotes }} Upvotes</span>#}
+{#                    </form>#}
+{##}
+{#                    <!-- Downvote button -->#}
+{#                    <form method="post" action="{% url 'downvote' user.username %}">#}
+{#                        {% csrf_token %}#}
+{#                        <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded-full flex items-center ml-2">#}
+{#                            Downvote <span class="ml-1 text-lg">&#9660;</span>#}
+{#                        </button>#}
+{#                        <span class="ml-2 text-sm">{{ profile.downvotes }} Downvotes</span>#}
+{#                    </form>#}
+{#                {% endif %}#}
+{#            </div>#}
+
+
+        <div class="bg-white p-8 rounded-lg shadow-md">
+        {% if user.username != request.user.username %}
+{#            If the profile is not the user's own profile#}
+                 <div class="mt-2 flex items-center">
                     <!-- Upvote button -->
                     <form method="post" action="{% url 'upvote' user.username %}">
                         {% csrf_token %}
@@ -34,12 +60,7 @@
                         </button>
                         <span class="ml-2 text-sm">{{ profile.downvotes }} Downvotes</span>
                     </form>
-                {% endif %}
             </div>
-
-
-        <div class="bg-white p-8 rounded-lg shadow-md">
-        {% if user.username != request.user.username %}
             <div class="bg-gray-100 p-4 rounded-lg shadow-md">
                 <legend class="text-xl font-bold mb-3 text-gray-700">Profile Info</legend>
                 <div class="text-gray-700">

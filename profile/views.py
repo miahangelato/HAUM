@@ -81,37 +81,38 @@ def profile(request, username):
 # Upvote view
 @login_required
 def upvote(request, username):
-    user = request.user
-    target_user = User.objects.get(username=username)
-    target_profile = Profile.objects.get(user=target_user)
+    user = request.user # The user who is upvoting(login user)
+    target_user = User.objects.get(username=username) # The user who is being upvoted
+    target_profile = Profile.objects.get(user=target_user) # The profile of the user who is being upvoted
 
     try:
-        user_vote = UserVote.objects.get(voter=user, profile=target_profile)
-        if user_vote.is_upvote:
+        user_vote = UserVote.objects.get(voter=user, profile=target_profile) # Check if the user has voted before
+        if user_vote.is_upvote: # Check if the user has upvoted before
             # The user has upvoted, so remove the vote
-            user_vote.delete()
+            user_vote.delete() # Delete the vote
             if target_profile.upvotes > 0:  # Ensure upvotes is not negative
-                target_profile.upvotes -= 1
-                target_profile.save()
+                target_profile.upvotes -= 1 # Decrement the upvotes
+
+                target_profile.save() # Save the changes
             messages.success(request, f'You have removed your upvote for {target_user.username}!')
         else:
             # The user has downvoted, so change the vote to upvote
-            user_vote.is_upvote = True
+            user_vote.is_upvote = True # Change the vote to upvote
             user_vote.save()
             if target_profile.downvotes > 0:  # Ensure downvotes is not negative
-                target_profile.downvotes -= 1
-            target_profile.upvotes += 1
-            target_profile.save()
+                target_profile.downvotes -= 1 # Decrement the downvotes
+            target_profile.upvotes += 1 # Increment the upvotes
+            target_profile.save() # Save the changes
             messages.success(request, f'You have changed your vote to an upvote for {target_user.username}!')
     except UserVote.DoesNotExist:
         # The user hasn't voted before, so create a new upvote
-        user_vote = UserVote(voter=user, profile=target_profile, is_upvote=True)
-        user_vote.save()
-        target_profile.upvotes += 1
-        target_profile.save()
-        messages.success(request, f'You have upvoted {target_user.username}!')
+        user_vote = UserVote(voter=user, profile=target_profile, is_upvote=True) # Create a new upvote
+        user_vote.save() # Save the upvote
+        target_profile.upvotes += 1 # Increment the upvotes
+        target_profile.save() # Save the changes
+        messages.success(request, f'You have upvoted {target_user.username}!') # Display a success message
 
-    return redirect('profile', username=username)
+    return redirect('profile', username=username) # Redirect to the profile page of the user who is being upvoted
 
 # Downvote view
 @login_required

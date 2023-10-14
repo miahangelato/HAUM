@@ -21,7 +21,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 
 from item.forms import NewItemForm, EditItemForm
-from item.models import Item, Category
+from item.models import Item, Category, PriceRange
 from profile.models import Location
 
 
@@ -29,14 +29,14 @@ def items(request):
     query = request.GET.get('query', '')
     category_id = request.GET.get('category', 0)
     location_id = request.GET.get('location', 0)
-    # price_range_id = request.GET.get('price_range', None)
-    # min_price = request.GET.get('min_price', 0)  # Default to 0 if not provided
-    # max_price = request.GET.get('max_price', float('inf'))  # Default to infinity if not provided
+    price_range_id = request.GET.get('price_range', None)
+    min_price = request.GET.get('min_price', 0)  # Default to 0 if not provided
+    max_price = request.GET.get('max_price', float('inf'))  # Default to infinity if not provided
 
     category = Category.objects.all()
     locations = Location.objects.all()
     items = Item.objects.filter(is_sold=False)
-    # price_ranges = PriceRange.objects.all()
+    price_ranges = PriceRange.objects.all()
 
     if category_id:
         items = items.filter(category_id=category_id)
@@ -44,13 +44,13 @@ def items(request):
     if location_id:
         items = items.filter(created_by__profile__location_id=location_id)
 
-    # if price_range_id:
-    #     # Use the selected price range to filter items
-    #     price_range = PriceRange.objects.get(pk=price_range_id)
-    #     items = items.filter(price__gte=price_range.min_price, price__lte=price_range.max_price)
-    # else:
-    #     # Filter items based on the custom price range provided by the user
-    #     items = items.filter(price__gte=min_price, price__lte=max_price)
+    if price_range_id:
+        # Use the selected price range to filter items
+        price_range = PriceRange.objects.get(pk=price_range_id)
+        items = items.filter(price__gte=price_range.min_price, price__lte=price_range.max_price)
+    else:
+        # Filter items based on the custom price range provided by the user
+        items = items.filter(price__gte=min_price, price__lte=max_price)
 
     if query:
         items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
@@ -62,10 +62,10 @@ def items(request):
         'category_id': int(category_id),
         'location': locations,
         'location_id': int(location_id),
-        # 'price_ranges': price_ranges,
-        # 'selected_price_range': int(price_range_id) if price_range_id else None,
-        # 'min_price': min_price,
-        # 'max_price': max_price,
+        'price_ranges': price_ranges,
+        'selected_price_range': int(price_range_id) if price_range_id else None,
+        'min_price': min_price,
+        'max_price': max_price,
     })
 
 
