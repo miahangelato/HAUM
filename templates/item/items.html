@@ -7,49 +7,60 @@
         <div class ="col-span-1">
             <form method="get" action="{% url 'item:items' %}">
                 <input name="query" class="w-full py-4 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search for items">
-                <button class="mt-2 py-4 px-8 text-lg text-white rounded-xl" style="background: {{ user.profile.color }}">Search</button>
+{#                <button class="mt-2 py-4 px-8 text-lg text-white rounded-xl" style="background: {{ user.profile.color }}">Search</button>#}
+
+                <!-- Category filter -->
+                <p class="font-semibold text-xl">Categories</p>
+                <ul>
+                    {% for category in category %}
+                        <li class="py-2 px-2 rounded-xl">
+                            <input type="checkbox" name="categories" value="{{ category.id }}" id="category_{{ category.id }}"
+                                   {% if category.id|stringformat:"s" in request.GET.categories %}checked{% endif %}>
+                            <label for="category_{{ category.id }}">{{ category.name }}</label>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Price Range filter -->
+                <p class="font-semibold text-xl">Price Range</p>
+                <ul>
+                    {% for price_range in price_ranges %}
+                        <li class="py-2 px-2 rounded-xl">
+                            <input type="checkbox" name="price_ranges" value="{{ price_range.id }}" id="price_range_{{ price_range.id }}"
+                                   {% if price_range.id|stringformat:"s" in request.GET.price_ranges %}checked{% endif %}>
+                            <label for="price_range_{{ price_range.id }}">{{ price_range.name }}</label>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Location filter -->
+                <p class="font-semibold text-xl">Preferred location</p>
+                <ul>
+                    {% for location in location %}
+                        <li class="py-2 px-2 rounded-xl">
+                            <input type="checkbox" name="locations" value="{{ location.id }}" id="location_{{ location.id }}"
+                                   {% if location.id|stringformat:"s" in request.GET.locations %}checked{% endif %}>
+                            <label for="location_{{ location.id }}">{{ location.name }}</label>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            <button class="mt-2 py-4 px-8 text-lg text-white rounded-xl" style="background: {{ user.profile.color }}">Search</button>
+{#                <hr class="my-6">#}
+{#                <input type="submit" class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white"#}
+{#                       style="background: {{ user.profile.color }}" value="Apply Filters">#}
             </form>
 
-            <hr class="my-6">
-
-            <p class="font-semibold text-xl">Categories</p>
-            <ul>
-                {% for category in category %}
-                    <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200 {% endif %}">
-                        <a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-
-            <p class="font-semibold text-xl">Price Range</p>
-            <ul>
-                {% for price_range in price_ranges %}
-                    <li class="py-2 px-2 rounded-xl{% if price_range.id == selected_price_range %} bg-gray-200 {% endif %}">
-                    <a href="{% url 'item:items' %}?query={{ query }}&price_range={{ price_range.id }}">{{ price_range.name }}</a>
-                </li>
-                {% endfor %}
-            </ul>
-
-
-
-            <p class="font-semibold text-xl">Preferred location</p>
-            <ul>
-                {% for location in location %}
-                    <li class="py-2 px-2 rounded-xl{% if location.id == location_id %} bg-gray-200 {% endif %}">
-                        <a href="{% url 'item:items' %}?query={{ query }}&location={{ location.id }}">{{ location.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
 
             <hr class="my-6">
 
 {#            <p class="font-semibold text-xl">Clear filters</p>#}
-{##}
-{#            <ul>#}
-{#                <li class="py-2 px-2 rounded-xl">#}
-{#                    <a href="{% url 'item:items' %}" class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white bg-red-800">Clear all filters</a>#}
-{#                </li>#}
-{#            </ul>#}
+
+            <ul>
+                <li class="py-2 px-2 rounded-xl">
+                    <a href="{% url 'item:items' %}" class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white" style="background: {{ user.profile.color }}">Clear all filters</a>
+                </li>
+            </ul>
 
         </div>
 

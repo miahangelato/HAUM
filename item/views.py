@@ -27,29 +27,30 @@ from profile.models import Location
 
 def items(request):
     query = request.GET.get('query', '')
-    category_id = request.GET.get('category', 0)
-    location_id = request.GET.get('location', 0)
-    price_range_id = request.GET.get('price_range', None)
-    min_price = request.GET.get('min_price', 0)  # Default to 0 if not provided
-    max_price = request.GET.get('max_price', float('inf'))  # Default to infinity if not provided
+    category_ids = request.GET.getlist('categories')  # Get a list of selected category IDs
+    location_ids = request.GET.getlist('locations')  # Get a list of selected location IDs
+    price_range_ids = request.GET.getlist('price_ranges')  # Get a list of selected price range IDs
+    min_price = request.GET.get('min_price', 0)
+    max_price = request.GET.get('max_price', float('inf'))
 
     category = Category.objects.all()
     locations = Location.objects.all()
     items = Item.objects.filter(is_sold=False)
     price_ranges = PriceRange.objects.all()
 
-    if category_id:
-        items = items.filter(category_id=category_id)
+    if category_ids:
+        items = items.filter(category_id__in=category_ids)
 
-    if location_id:
-        items = items.filter(created_by__profile__location_id=location_id)
+    if location_ids:
+        items = items.filter(created_by__profile__location_id__in=location_ids)
 
-    if price_range_id:
-        # Use the selected price range to filter items
-        price_range = PriceRange.objects.get(pk=price_range_id)
-        items = items.filter(price__gte=price_range.min_price, price__lte=price_range.max_price)
+    if price_range_ids:
+        selected_price_ranges = PriceRange.objects.filter(id__in=price_range_ids)
+        price_filter = Q()
+        for price_range in selected_price_ranges:
+            price_filter |= Q(price__gte=price_range.min_price, price__lte=price_range.max_price)
+        items = items.filter(price_filter)
     else:
-        # Filter items based on the custom price range provided by the user
         items = items.filter(price__gte=min_price, price__lte=max_price)
 
     if query:
@@ -59,14 +60,13 @@ def items(request):
         'items': items,
         'query': query,
         'category': category,
-        'category_id': int(category_id),
         'location': locations,
-        'location_id': int(location_id),
         'price_ranges': price_ranges,
-        'selected_price_range': int(price_range_id) if price_range_id else None,
+        'selected_price_ranges': price_range_ids,
         'min_price': min_price,
         'max_price': max_price,
     })
+
 
 
 

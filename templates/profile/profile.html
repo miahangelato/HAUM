@@ -42,7 +42,7 @@
         <div class="bg-white p-8 rounded-lg shadow-md">
         {% if user.username != request.user.username %}
 {#            If the profile is not the user's own profile#}
-                 <div class="mt-2 flex items-center">
+                 <div class="mt-2 flex items-center">`
                     <!-- Upvote button -->
                     <form method="post" action="{% url 'upvote' user.username %}">
                         {% csrf_token %}
@@ -95,6 +95,9 @@
                                     <div class="p-6 bg-white rounded-b-xl">
                                         <h2 class="text-2xl">{{ item.name }}</h2>
                                         <p class="text-gray-500">Price: {{ item.price }}</p>
+{#                                        <p class="text-gray-500">Location: {{ item.location }}</p>#}
+                                        <p class="text-gray-500">Category: {{ item.category }}</p>
+
                                     </div>
                                 </a>
                             </div>
