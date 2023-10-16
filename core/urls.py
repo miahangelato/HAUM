@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 from core import views
 from .forms import LoginForm
 
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('contact/', views.contact, name='contact'),
@@ -13,4 +14,12 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='core/login.html', authentication_form=LoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name="core/password_reset.html"), name='password_reset'),
+
+    path('password_reset_sent/', auth_views.PasswordResetDoneView.as_view(template_name="core/password_sent.html"), name='password_reset_done'),
+
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="core/password_rest_form.html"), name='password_reset_confirm'),
+
+    path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="core/password_reset_done.html"), name='password_reset_complete'),
     ]

@@ -40,6 +40,16 @@
         {% endif %}
 
         <button class="py-4 px-8 text-lg bg-red-800 hover:bg-red-950 rounded-xl text-white">Submit</button>
+
+        <div class ="d-flex justify-content-center links">
+            Don't have an account yet? <a href="{% url 'signup' %}">
+            Sign Up</a>
+        </div>
+
+        <div class ="d-flex justify-content-center links">
+            Forgot your password? <a href="{% url 'password_reset' %}">
+            Forgot Password</a>
+        </div>
     </form>
 </div>
 

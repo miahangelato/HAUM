@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     #'bootstrap5',
     'login_history',
+    'colorfield'
 ]
 
 MIDDLEWARE = [
@@ -141,6 +142,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 
 LOGOUT_REDIRECT_URL = '/login/'
+
+#SMTP CONFIG
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

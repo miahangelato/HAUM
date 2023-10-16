@@ -18,8 +18,8 @@
                         <p class="ml-2 text-sm"><strong>{{ item.created_by.username }}</strong></p>
                         <p class="ml-2 text-sm"><strong>{{ profile.firstname }} {{ profile.lastname }}</strong></p>
                         <p class="ml-2 text-sm"><strong>{{ user.email }}</strong></p>
-                        <p class="ml-2 text-sm"><strong>Upvotes: {{ profile.upvotes }}</strong></p>
-                        <p class="ml-2 text-sm"><strong>Downvotes: {{ profile.downvotes }}</strong></p>
+                        <p class="ml-2 text-sm"><strong>Upvotes: {{ item.created_by.profile.upvotes }}</strong></p>
+                        <p class="ml-2 text-sm"><strong>Downvotes: {{ item.created_by.profile.downvotes }}</strong></p>
                     </div>
             </div>
             

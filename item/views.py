@@ -55,8 +55,8 @@ def items(request):
     # To implement "Most Upvoted" sorting with recency:
     if upvoted:
         items = items.order_by('-upvotes_count', 'age')  # Sort by most upvoted items with recency
-    elif most_downvoted:
-        items = items.order_by('-downvotes_count')  # Sort by most downvoted items
+    # elif most_downvoted:
+    #     items = items.order_by('-downvotes_count')  # Sort by most downvoted items
     else:
         items = items.order_by('-upvotes_count')  # Default to sorting by most upvoted items
 
