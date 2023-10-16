@@ -59,8 +59,8 @@ def profile(request, username):
         'u_form': u_form,
         'p_form': p_form,
         'bio': profile.bio,
-        'firstname': profile.firstname,
-        'lastname': profile.lastname,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
         'address': profile.address,
         'user': user,
         'profile': profile,
@@ -78,41 +78,46 @@ def profile(request, username):
 
     return render(request, 'profile/profile.html', context)
 
+
+# GINALAW NO VOTE OWN
 # Upvote view
 @login_required
 def upvote(request, username):
-    user = request.user # The user who is upvoting(login user)
-    target_user = User.objects.get(username=username) # The user who is being upvoted
-    target_profile = Profile.objects.get(user=target_user) # The profile of the user who is being upvoted
+    user = request.user  # The user who is upvoting (logged-in user)
+    target_user = User.objects.get(username=username)  # The user who is being upvoted
+    target_profile = Profile.objects.get(user=target_user)  # The profile of the user who is being upvoted
+
+    if user == target_user:
+        messages.error(request, "You cannot vote your own profile.")
+        return redirect('profile', username=username)
 
     try:
-        user_vote = UserVote.objects.get(voter=user, profile=target_profile) # Check if the user has voted before
-        if user_vote.is_upvote: # Check if the user has upvoted before
+        user_vote = UserVote.objects.get(voter=user, profile=target_profile)  # Check if the user has voted before
+        if user_vote.is_upvote:  # Check if the user has upvoted before
             # The user has upvoted, so remove the vote
-            user_vote.delete() # Delete the vote
+            user_vote.delete()  # Delete the vote
             if target_profile.upvotes > 0:  # Ensure upvotes is not negative
-                target_profile.upvotes -= 1 # Decrement the upvotes
-
-                target_profile.save() # Save the changes
+                target_profile.upvotes -= 1  # Decrement the upvotes
+                target_profile.save()  # Save the changes
             messages.success(request, f'You have removed your upvote for {target_user.username}!')
         else:
             # The user has downvoted, so change the vote to upvote
-            user_vote.is_upvote = True # Change the vote to upvote
+            user_vote.is_upvote = True  # Change the vote to upvote
             user_vote.save()
             if target_profile.downvotes > 0:  # Ensure downvotes is not negative
-                target_profile.downvotes -= 1 # Decrement the downvotes
-            target_profile.upvotes += 1 # Increment the upvotes
-            target_profile.save() # Save the changes
+                target_profile.downvotes -= 1  # Decrement the downvotes
+            target_profile.upvotes += 1  # Increment the upvotes
+            target_profile.save()  # Save the changes
             messages.success(request, f'You have changed your vote to an upvote for {target_user.username}!')
     except UserVote.DoesNotExist:
         # The user hasn't voted before, so create a new upvote
-        user_vote = UserVote(voter=user, profile=target_profile, is_upvote=True) # Create a new upvote
-        user_vote.save() # Save the upvote
-        target_profile.upvotes += 1 # Increment the upvotes
-        target_profile.save() # Save the changes
-        messages.success(request, f'You have upvoted {target_user.username}!') # Display a success message
+        user_vote = UserVote(voter=user, profile=target_profile, is_upvote=True)  # Create a new upvote
+        user_vote.save()  # Save the upvote
+        target_profile.upvotes += 1  # Increment the upvotes
+        target_profile.save()  # Save the changes
+        messages.success(request, f'You have upvoted {target_user.username}!')  # Display a success message
 
-    return redirect('profile', username=username) # Redirect to the profile page of the user who is being upvoted
+    return redirect('profile', username=username)  # Redirect to the profile page of the user who is being upvoted
 
 # Downvote view
 @login_required
@@ -120,6 +125,10 @@ def downvote(request, username):
     user = request.user
     target_user = User.objects.get(username=username)
     target_profile = Profile.objects.get(user=target_user)
+
+    if user == target_user:
+        messages.error(request, "You cannot vote your own profile.")
+        return redirect('profile', username=username)
 
     try:
         user_vote = UserVote.objects.get(voter=user, profile=target_profile)

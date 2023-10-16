@@ -18,23 +18,23 @@ class LoginForm(AuthenticationForm):
     # }))
 
 
-
+#GINALAW
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'firstName', 'lastName', 'email', 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
     username = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'Username',
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
 
-    firstName = forms.CharField(widget=forms.TextInput(attrs={
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'First Name',
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
 
-    lastName = forms.CharField(widget=forms.TextInput(attrs={
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'Last Name',
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
@@ -53,6 +53,15 @@ class SignupForm(UserCreationForm):
         'placeholder': 'Confirm Password',
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
+
+    def save(self, commit=True):
+        user = super(SignupForm, self).save(commit=False)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+
+        if commit:
+            user.save()
+        return user
 
     def clean_email(self):
         email = self.cleaned_data['email']

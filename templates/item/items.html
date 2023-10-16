@@ -33,6 +33,21 @@
                     {% endfor %}
                 </ul>
 
+
+                <!-- Vote Filters -->
+                <p class="font-semibold text-xl">Vote Filters</p>
+                <ul>
+                    <li class="py-2 px-2 rounded-xl">
+                        <input type="checkbox" name="upvoted" id="upvoted-checkbox" {% if request.GET.upvoted %}checked{% endif %}>
+                        <label for="upvoted-checkbox">Most Upvoted</label>
+                    </li>
+                    <li class="py-2 px-2 rounded-xl">
+                        <input type="checkbox" name="downvoted" id="downvoted-checkbox" {% if request.GET.downvoted %}checked{% endif %}>
+                        <label for="downvoted-checkbox">Most Downvoted</label>
+                    </li>
+                </ul>
+
+
                 <!-- Location filter -->
                 <p class="font-semibold text-xl">Preferred location</p>
                 <ul>

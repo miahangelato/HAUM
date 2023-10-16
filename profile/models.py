@@ -11,6 +11,8 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
+
+#GINALAW NAME
 class Profile(models.Model):
     # color = models.CharField(max_length=7, blank=True, null=True)
     color = ColorField(default='#720026')
@@ -18,8 +20,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     bio = models.CharField(max_length=200, null=True, blank=True)
-    firstname = models.CharField(max_length=30, null=True, blank=True)
-    lastname = models.CharField(max_length=30, null=True, blank=True)
+    first_name = models.CharField(max_length=30, blank=True, null=True)
+    last_name = models.CharField(max_length=30, blank=True, null=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=True)
     address = models.CharField(max_length=300, null=True, blank=True)
     upvotes = models.PositiveIntegerField(default=0)

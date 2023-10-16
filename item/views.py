@@ -15,7 +15,8 @@
 # from profile.models import Location
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, ExpressionWrapper, F, Count, fields
+from django.db.models.functions import Now
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -37,6 +38,28 @@ def items(request):
     locations = Location.objects.all()
     items = Item.objects.filter(is_sold=False)
     price_ranges = PriceRange.objects.all()
+
+    upvoted = request.GET.get('upvoted', False)
+    downvoted = request.GET.get('downvoted', False)
+    most_downvoted = request.GET.get('most_downvoted', False)
+
+    # Annotate the items with upvote and downvote counts
+    items = items.annotate(
+        upvotes_count=Count('created_by__profile__uservote', filter=Q(created_by__profile__uservote__is_upvote=True)),
+        downvotes_count=Count('created_by__profile__uservote', filter=Q(created_by__profile__uservote__is_upvote=False))
+    )
+
+    # Calculate the age of the item
+    items = items.annotate(age=ExpressionWrapper(Now() - F('created_at'), output_field=fields.DurationField()))
+
+    # To implement "Most Upvoted" sorting with recency:
+    if upvoted:
+        items = items.order_by('-upvotes_count', 'age')  # Sort by most upvoted items with recency
+    elif most_downvoted:
+        items = items.order_by('-downvotes_count')  # Sort by most downvoted items
+    else:
+        items = items.order_by('-upvotes_count')  # Default to sorting by most upvoted items
+
 
     if category_ids:
         items = items.filter(category_id__in=category_ids)

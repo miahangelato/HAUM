@@ -11,10 +11,26 @@ class UserUpdateForm(forms.ModelForm):
         fields = ['username']
 
 # form eto para ma change update yung user profile mo
+#GINALAW
 class ProfileUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
+
     class Meta:
         model = Profile
-        fields = ['firstname', 'lastname', 'bio', 'address', 'location', 'image', 'color', 'font_preference']
+        fields = ['bio', 'address', 'location', 'image', 'color', 'font_preference']
+
+    def save(self, commit=True):
+        profile = super(ProfileUpdateForm, self).save(commit=False)
+        user = profile.user
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+
+        if commit:
+            user.save()
+            profile.save()
+
+        return profile
 
 
 #Color Preference Form can be deleted since the color field is already in the ProfileUpdateForm
