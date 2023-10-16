@@ -1,265 +1,166 @@
 {% extends 'core/base.html' %}
 {% block title %}Profile{% endblock title %}
-
+{% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="bg-white p-8 rounded-lg shadow-md">
-        <div class="flex items-center">
-           <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-            src="{{ user.profile.image.url }}" alt="Bordered avatar" style="border: 2px solid {{ user.profile.color }};">
+
+<head>
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
+</head>
 
 
-            <div class="ml-4">
-                <h2 class="text-2xl font-bold">{{ user.username }}</h2>
-                <p class="text-gray-500">{{ user.email }}</p>
-            </div>
+        <div class="mt-2 flex items-center">
+            {% if not is_own_profile %}
+                <!-- Upvote button -->
+                <form method="post" action="{% url 'upvote' user.username %}">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded-full flex items-center">
+                        Upvote <span class="ml-1 text-lg">&#9650;</span>
+                    </button>
+                    <span class="ml-2 text-sm">{{ profile.upvotes }} Upvotes</span>
+                </form>
+
+                <!-- Downvote button -->
+                <form method="post" action="{% url 'downvote' user.username %}">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded-full flex items-center ml-2">
+                        Downvote <span class="ml-1 text-lg">&#9660;</span>
+                    </button>
+                    <span class="ml-2 text-sm">{{ profile.downvotes }} Downvotes</span>
+                </form>
+            {% endif %}
         </div>
 
-{#             <div class="mt-2 flex items-center">#}
-{#                {% if not is_own_profile %}  #}
-{#                     If the profile is not the user's own profile#}
-{#                    <!-- Upvote button -->#}
-{#                    <form method="post" action="{% url 'upvote' user.username %}">#}
-{#                        {% csrf_token %}#}
-{#                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded-full flex items-center">#}
-{#                            Upvote <span class="ml-1 text-lg">&#9650;</span>#}
-{#                        </button>#}
-{#                        <span class="ml-2 text-sm">{{ profile.upvotes }} Upvotes</span>#}
-{#                    </form>#}
-{##}
-{#                    <!-- Downvote button -->#}
-{#                    <form method="post" action="{% url 'downvote' user.username %}">#}
-{#                        {% csrf_token %}#}
-{#                        <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded-full flex items-center ml-2">#}
-{#                            Downvote <span class="ml-1 text-lg">&#9660;</span>#}
-{#                        </button>#}
-{#                        <span class="ml-2 text-sm">{{ profile.downvotes }} Downvotes</span>#}
-{#                    </form>#}
-{#                {% endif %}#}
-{#            </div>#}
-
-
-        <div class="bg-white p-8 rounded-lg shadow-md">
-        {% if user.username != request.user.username %}
-{#            If the profile is not the user's own profile#}
-                 <div class="mt-2 flex items-center">`
-                    <!-- Upvote button -->
-                    <form method="post" action="{% url 'upvote' user.username %}">
-                        {% csrf_token %}
-                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded-full flex items-center">
-                            Upvote <span class="ml-1 text-lg">&#9650;</span>
-                        </button>
-                        <span class="ml-2 text-sm">{{ profile.upvotes }} Upvotes</span>
-                    </form>
-
-                    <!-- Downvote button -->
-                    <form method="post" action="{% url 'downvote' user.username %}">
-                        {% csrf_token %}
-                        <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded-full flex items-center ml-2">
-                            Downvote <span class="ml-1 text-lg">&#9660;</span>
-                        </button>
-                        <span class="ml-2 text-sm">{{ profile.downvotes }} Downvotes</span>
-                    </form>
-            </div>
-            <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                <legend class="text-xl font-bold mb-3 text-gray-700">Profile Info</legend>
-                <div class="text-gray-700">
-                    <div class="mb-2">
-                        <span class="font-semibold">Username:</span> {{ user.username }}
-                    </div>
-                    <div class="mb-2">
-                        <span class="font-semibold">Email:</span> {{ user.email }}
-                    </div>
-                    <div>
-                        <span class="font-semibold">Bio:</span> {{ profile.bio }}
-                    </div>
-                    <div>
-                        <span class="font-semibold">Location:</span> {{ profile.location }}
-                    </div>
-                    <div>
-                        <span class="font-semibold">Name:</span> {{ profile.firstname }} {{ profile.lastname }}
-                    </div>
+        <div style="display: flex; justify-content: center">
+            <div class="card">
+                <div class="imgBox">
+                    <img src="{{ user.profile.image.url }}" alt="{{ user.username }} profile image"
+                         class="rounded-full">
                 </div>
-            </div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="content">
+                        <div class="details">
+                                <div class="mb-4">
+                                    <p class="font-semibold">Username: {{ user.username }}</p>
+                                </div>
 
-                {% if item %}
+                                <div class="mb-4">
+                                    <p class="font-semibold">Upvotes: {{ user.profile.upvotes }}</p>
+                                    <p class="font-semibold">Downvotes: {{ user.profile.downvotes }}</p>
+                                </div>
 
-                    <div class="grid grid-cols-3 gap-3">
-                        {% for item in item %}
-                            <div>
-                                <a href="{% url 'item:detail' item.id %}">
-                                    <div>
-                                        <img src="{{ item.image.url }}" class="rounded-t-xl">
+                            {% if user.username != request.user.username %}
+                                {% if items %}
+                                    <div class="grid grid-cols-3 gap-3">
+                                        {% for item in items %}
+                                            <div>
+                                                <a href="{% url 'item:detail' item.id %}">
+                                                    <div>
+                                                        <img src="{{ item.image.url }}" class="rounded-t-xl">
+                                                    </div>
+                                                    <div class="p-6 bg-white rounded-b-xl">
+                                                        <h2 class="text-2xl">{{ item.name }}</h2>
+                                                        <p class="text-gray-500">Price: {{ item.price }}</p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div>
+
+                                    <div class="mb-4 w-1/8">
+                                        <label for="username" class="block text-gray-600 font-medium">Username:</label>
+                                        <input type="text" id="username" name="username" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.username }}">
                                     </div>
 
-                                    <div class="p-6 bg-white rounded-b-xl">
-                                        <h2 class="text-2xl">{{ item.name }}</h2>
-                                        <p class="text-gray-500">Price: {{ item.price }}</p>
-{#                                        <p class="text-gray-500">Location: {{ item.location }}</p>#}
-                                        <p class="text-gray-500">Category: {{ item.category }}</p>
-
+                                    <div class="mb-4 w-1/8">
+                                        <label for="firstname" class="block text-gray-600 font-medium">First Name:</label>
+                                        <input type="text" id="firstname" name="firstname" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.firstname }}">
                                     </div>
-                                </a>
-                            </div>
 
-{#                        #    <a href ="{% url 'item:detail' item.id %}">Go back</a>#}
-                        {% endfor %}
+                                    <div class="mb-4 w-1/8">
+                                        <label for="lastname" class="block text-gray-600 font-medium">Last Name:</label>
+                                        <input type="text" id="lastname" name="lastname" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.lastname }}">
+                                    </div>
 
-                     </div>
-                {% endif %}
+                                    <div class="mb-4 w-1/8">
+                                        <label for="bio" class="block text-gray-600 font-medium">Bio:</label>
+                                        <textarea id="bio" name="bio" class="border border-gray-300 p-2 rounded w-full" required rows="6">{{ user.profile.bio }}</textarea>
+                                    </div>
 
+                                    <div class="mb-4 w-1/8">
+                                        <label for="profile-image" class="block text-gray-600 font-medium">Profile Image:</label>
+                                        <input type="file" id="profile-image" name="image" class="border border-gray-300 p-2 rounded w-full">
+                                    </div>
 
-        {% else %}
-              <form method="POST" enctype="multipart/form-data" class="mt-4">
-                {% csrf_token %}
+                                    <div class="mb-4 w-1/8">
+                                        <label for="location">Location:</label>
+                                        <select id="location" name="location" class="border border-gray-300 p-2 rounded w-full">
+                                            <option value="" {% if not user.profile.location %}selected{% endif %}>Select a Location</option>
+                                            {% for location in locations %}
+                                                <option value="{{ location.id }}" {% if location.id == user.profile.location_id %}selected{% endif %}>
+                                                    {{ location.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
+                                    <div class="mb-4 w-1/8">
+                                        <label for="address" class="block text-gray-600 font-medium">Address:</label>
+                                        <input type="text" id="address" name="address" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.address }}">
+                                    </div>
 
-              <div class="mb-4">
-                    <p class="font-semibold">Upvotes: {{ user.profile.upvotes }}</p>
-                    <p class="font-semibold">Downvotes: {{ user.profile.downvotes }}</p>
-                </div>
+                                    <div class="mb-4 w-1/8">
+                                        <label for="color">Choose a color:</label>
+                                        <input type="color" id="color" name="color" value="{{ user.profile.color }}">
+                                    </div>
 
-                <div class="mb-4 w-1/2">
-                    <label for="{{ u_form.username.id_for_label }}" class="block text-gray-600 font-medium">Username:</label>
-                    <input type="text" id="username" name="username" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.username }}">
-                </div>
+                                    <div class="mb-4 w-1/8">
+                                        {{ form.as_table }}
+                                    </div>
+                                </div>
+                                <!-- Information Boxes -->
+                                <!-- End Information Boxes -->
+                                <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8" style="background: {{ user.profile.color }}" type="submit">Update Profile</button>
+                                <div>
+{#                                    <input type="text" class="tab-content" id="floatingHistory" name="history" placeholder="LoginHistory">#}
+                                    <label>Login History:</label>
+                                        {% for foo in history %}
+                                        {{ foo.ip }}
+                                        {{ foo.user_agent }}
+                                        {{ foo.date_time }}
+                                    {% endfor %}
+                                </div>
+                             </form>
+                           </div>
+{#                                {% endif %}#}
+                         </div>
 
+                            {% endif %}
 
-                  <div class="mb-4 w-1/2">
-                    <label for="{{ u_form.first_name.id_for_label }}" class="block text-gray-600 font-medium">First Name:</label>
-                    <input type="text" id="first_name" name="first_name" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.first_name }}">
-                </div>
-
-                <div class="mb-4 w-1/2">
-                    <label for="{{ u_form.last_name.id_for_label }}" class="block text-gray-600 font-medium">Last Name:</label>
-                    <input type="text" id="last_name" name="last_name" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.last_name }}">
-                </div>
-
-                <div class="mb-4 w-1/2">
-                    <label for="{{ p_form.location.id_for_label }}" class="block text-gray-600 font-medium">Location:</label>
-                    <select id="location" name="location" class="border border-gray-300 p-2 rounded w-full">
-                        <option value="" {% if not user.profile.location %}selected{% endif %}>Select a Location</option>
-                        {% for location in locations %}
-                            <option value="{{ location.id }}" {% if location.id == user.profile.location_id %}selected{% endif %}>
-                                {{ location.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="mb-4 w-1/2">
-
-                    <label for="{{ p_form.address.id_for_label }}" class="block text-gray-600 font-medium">Address:</label>
-{#                        Change ID and Name from location to address#}
-                    <input type="text" id="address" name="address" class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.address }}">
-                </div>
-
-
-               <div class="mb-4 w-1/2">
-                    <label for="{{ p_form.profile.bio.id_for_label }}" class="block text-gray-600 font-medium">Bio:</label>
-                    <textarea id="bio" name="bio" class="border border-gray-300 p-2 rounded w-full" required rows="6">{{ user.profile.bio }}</textarea>
-                </div>
-                {# Removed Color and Font from separated <form> #}
-                {# Included them from the original form #}
-                {# To allow a single submit button to work #}
-                <div class="mb-4 w-1/2">
-                    <label for="{{ form.color.id_for_label }}">Choose a color:</label>
-                    <input type="color" id="color" name="color" value="{{ user.profile.color }}">
-                </div>
-
-                <div class="mb-4 w-1/2">
-                    {{ form.as_table }}
-                </div>
-
-
-
-{#                <form method="POST" enctype="multipart/form-data" class="absolute top-0 left-0 m-4">#}
-{#                    {% csrf_token %}#}
-{#                    <div class="mb-4">#}
-{#                        {{ color_form.color.label_tag }}#}
-{#                        <div class="flex items-center">#}
-{#                            <select name="color" class="bg-white border border-gray-300 p-2 rounded">#}
-{#                                <option value="#FF0000">Red</option>#}
-{#                                <option value="#00FF00">Green</option>#}
-{#                                <option value="#0000FF">Blue</option>#}
-{#                                <!-- Add more color options as needed -->#}
-{#                            </select>#}
-{#                            <div class="ml-2" style="width: 30px; height: 30px; background-color: {{ color_form.color.value }};"></div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <button class="bg-red-700 hover:bg-red-900 text-white font-semibold py-2 px-4 rounded" style ="background:{{ color_form.color.value }}" type="submit">Update Color</button>#}
-{#                </form>#}
-
-{#              <h1>Color Picker Example</h1>#}
-{##}
-{#                <form>#}
-{#                    <label for="color">Choose a color:</label>#}
-{#                    <input type="color" id="color" name="color" value="#FF0000">#}
-{#                    <input type="submit" value="Submit">#}
-{##}
-{##}
-{#                </form>#}
-{#<f#}
-{#            <h1>Select a Color</h1>#}
-{##}
-{#                <!-- Create checkboxes for color options -->#}
-{#                <label class="color-option" style="background-color: #FF0000">#}
-{#                    <input type="radio" name="color" value="#FF0000"> Red#}
-{#                </label>#}
-{##}
-{#                <label class="color-option" style="background-color: #00FF00">#}
-{#                    <input type="radio" name="color" value="#00FF00"> Green#}
-{#                </label>#}
-{##}
-{#                <label class="color-option" style="background-color: #0000FF">#}
-{#                    <input type="radio" name="color" value="#0000FF"> Blue#}
-{#                </label>#}
-{#                <button id="submit-button">Submit</button>#}
-
-{#              <form method="post">#}
-{#                    {% csrf_token %}#}
-{#                    <!-- Display and allow the user to select a color -->#}
-{##}
-{#                    <input type="submit" value="Submit">#}
-{#              </form>#}
-{##}
-{##}
-                  <!-- font_preference.html -->
-{#                <form method="post">#}
-{#                    {% csrf_token %}#}
-{##}
-{#                    <input type="submit" value="Submit">#}
-{#                </form>#}
-
-
-
-                <div class="mb-4 w-1/2">
-                    <label for="{{ p_form.image.id_for_label }}" class="block text-gray-600 font-medium">Profile Image:</label>
-                    <input type="file" id="profile-image" name="image" class="border border-gray-300 p-2 rounded w-full">
-                </div>
-
-
-                <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8" style = "background: {{ user.profile.color }}" type="submit">Update Profile</button>
-            </form>
-
-
-        {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-{% endblock content %}
+{% endblock %}
 <script>
-        // JavaScript code to handle color selection
-        document.addEventListener('DOMContentLoaded', function() {
-            const submitButton = document.getElementById('submit-button');
+    // JavaScript code to handle color selection
+    document.addEventListener('DOMContentLoaded', function() {
+        const submitButton = document.getElementById('submit-button');
 
-            submitButton.addEventListener('click', function() {
-                const selectedColor = document.querySelector('input[name="color"]:checked');
+        submitButton.addEventListener('click', function() {
+            const selectedColor = document.querySelector('input[name="color"]:checked');
 
-                if (selectedColor) {
-                    alert('Selected color: ' + selectedColor.value);
-                } else {
-                    alert('Please select a color.');
-                }
-            });
+            if (selectedColor) {
+                alert('Selected color: ' + selectedColor.value);
+            } else {
+                alert('Please select a color.');
+            }
         });
-    </script>
+    });
+</script>
+
