@@ -5,6 +5,7 @@ from PIL import Image
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
 class Location(models.Model):
     name = models.CharField(max_length=50)
 
@@ -43,12 +44,12 @@ class Profile(models.Model):
             img.thumbnail(output_size)
             img.save(self.image.path)
 
-
     def create_profile(sender, instance, created,kwargs):
         if created:
             Profile.objects.create(user=instance)
             # post_save.connect(create_profile, sender=User)
 # AFTER MO GUFMAWA NG MODELS LAGAY MO SA ADMINv
+
 
 # Path: profile/admin.py
 class UserVote(models.Model):

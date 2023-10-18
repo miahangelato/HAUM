@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class ="grid grid-cols-5 gap-6">
-        <div class="col-span-3">
+        <div class="col-span-3 flex items-center justify-center">
             <img src="{{ item.image.url }}" class="rounded-t-xl">
         </div>
 
@@ -16,13 +16,15 @@
                      src="{{ item.created_by.profile.image.url }}" alt="Bordered avatar" style="border: 2px solid {{ item.created_by.profile.color }}"></a>
                     <div class="user-tooltip">
                         <p class="ml-2 text-sm"><strong>{{ item.created_by.username }}</strong></p>
-                        <p class="ml-2 text-sm"><strong>{{ profile.firstname }} {{ profile.lastname }}</strong></p>
-                        <p class="ml-2 text-sm"><strong>{{ user.email }}</strong></p>
+                        <p class="ml-2 text-sm">
+                            <strong>{{ item.created_by.profile.first_name }} {{ item.created_by.profile.last_name }}</strong>
+                        </p>
+                        <p class="ml-2 text-sm"><strong>{{ item.created_by.email }}</strong></p>
                         <p class="ml-2 text-sm"><strong>Upvotes: {{ item.created_by.profile.upvotes }}</strong></p>
                         <p class="ml-2 text-sm"><strong>Downvotes: {{ item.created_by.profile.downvotes }}</strong></p>
                     </div>
             </div>
-            
+
             <h2 class="mb-6 text-3xl">{{ item.name }}</h2>
             <p class="text-gray-500"><strong>Price:</strong>{{ item.price }}</p>
             <p class="text-gray-500"><strong>Seller:</strong>{{ item.created_by }}</p>
@@ -37,8 +39,10 @@
             {% if request.user == item.created_by %}
                 <div class ="mt-6 p-6 bg-white rounded-xl">
                     <p>This is your item!</p>
-                    <a href ="{% url 'item:edit_item' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-800 text-white rounded-xl hover:bg-teal-950">Edit</a>
-                    <a href ="{% url 'item:delete' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-800 text-white rounded-xl hover:bg-red-950">Delete</a>
+                    <a href ="{% url 'item:edit_item' item.id %}"
+                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-800 text-white rounded-xl hover:bg-teal-950">Edit</a>
+                    <a href ="{% url 'item:delete' item.id %}"
+                       class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-800 text-white rounded-xl hover:bg-red-950">Delete</a>
                 </div>
 
             {% else %}
@@ -57,7 +61,7 @@
             {% for item in related_items %}
                 <div>
                     <a href="{% url 'item:detail' item.id %}">
-                        <div>
+                        <div class="bg-white rounded-lg overflow-hidden shadow-md">
                             <img src="{{ item.image.url }}" class="rounded-t-xl">
                         </div>
 
@@ -87,7 +91,7 @@
             z-index: 9999;
             width: 300px;
             top: 0;
-            right: 100%;
+            right: 150%;
         }
 
         .profile-container:hover .user-tooltip {

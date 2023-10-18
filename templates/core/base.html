@@ -35,14 +35,10 @@
                        class="px-6 py-3 text-lg font-semibold text-white rounded-xl"
                        style="background: {{ user.profile.color }}">Logout</a>
                 </div>
-            {% else %}
-                <a href="{% url 'signup' %}"
-                   class="px-6 py-3 text-lg font-semibold bg-red-800  text-white rounded-xl hover:bg-red-900">Sign Up</a>
-                <a href="{% url 'login' %}"
-                   class="px-6 py-3 text-lg font-semibold bg-red-800  text-white rounded-xl hover:bg-red-900">Login</a>
             {% endif %}
         </div>
     </nav>
+
     <div class="px-6 py-6">
         {% block content %}{% endblock content %}
     </div>
@@ -55,7 +51,7 @@
         </div>
 
         <div class="w-13">
-            <h3 class="mb-5 text-xl font-semibold text-white">Menu</h3>
+            <h3 class="text-xl font-semibold text-white">Menu</h3>
 
             <ul class="space-y-2">
                 <li><a href="{% url 'about' %}" class="text-lg text-white hover:text-teal-700">About</a></li>

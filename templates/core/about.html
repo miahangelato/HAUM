@@ -107,11 +107,12 @@
         </div>
     </div>
 
-    <hr style="width: 100%; border: 1px solid #560000; margin: 20px 0;">
+    <hr style="width: 100%; border: 1px solid {{ user.profile.color}}; margin: 20px 0;">
     <h2 class="text-3xl font-semibold mt-6 text-center" style="text-transform: uppercase; margin-bottom: 20px;">Team Members</h2>
-    <div class="team-members-container" style="display: flex; flex-wrap: wrap; gap: 50px; justify-content: center; align-items: center; cursor: pointer;">
+    <div class="team-members-container"
+         style="display: flex; flex-wrap: wrap; gap: 50px; justify-content: center; align-items: center; cursor: pointer;">
         <div class="team-member">
-            <img class="team-member-image" src="{% static 'team/auds.png' %}" alt="Audrey Tan" style="border: 5px solid #560000; border-radius: 80%; width: 150px; height: 150px;">
+            <img class="team-member-image" src="{% static 'team/auds.png' %}" alt="Audrey Tan" style="border: 5px solid {{ user.profile.color}}; border-radius: 80%; width: 150px; height: 150px;">
             <div class="team-member-info" style="display: none;">
                 <h3 class="text-xl font-semibold" style="text-transform: uppercase;">Audrey Tan</h3>
                 <p>Email: aatan@student.hau.edu.ph</p>
@@ -119,7 +120,7 @@
         </div>
 
         <div class="team-member">
-            <img class="team-member-image" src="{% static 'team/nashie.png' %}" alt="Nash Maglaqui" style="border: 5px solid #560000; border-radius: 80%; width: 150px; height: 150px;">
+            <img class="team-member-image" src="{% static 'team/nashie.png' %}" alt="Nash Maglaqui" style="border: 5px solid {{ user.profile.color}}; border-radius: 80%; width: 150px; height: 150px;">
             <div class="team-member-info" style="display: none;">
                 <h3 class="text-xl font-semibold" style="text-transform: uppercase;">Nash Maglaqui</h3>
                 <p>Email: snmaglaqui@student.hau.edu.ph</p>
@@ -127,7 +128,7 @@
         </div>
 
         <div class="team-member">
-            <img class="team-member-image" src="{% static 'team/miah.png' %}" alt="Miah To" style="border: 5px solid #560000; border-radius: 80%; width: 150px; height: 150px;">
+            <img class="team-member-image" src="{% static 'team/miah.png' %}" alt="Miah To" style="border: 5px solid {{ user.profile.color}}; border-radius: 80%; width: 150px; height: 150px;">
             <div class="team-member-info" style="display: none;">
                 <h3 class="text-xl font-semibold" style="text-transform: uppercase;">Miah To</h3>
                 <p>Email: mmto@student.hau.edu.ph</p>
@@ -135,7 +136,7 @@
         </div>
 
         <div class="team-member">
-            <img class="team-member-image" src="{% static 'team/hel.png' %}" alt="Helaena Sanchez" style="border: 5px solid #560000; border-radius: 80%; width: 150px; height: 150px;">
+            <img class="team-member-image" src="{% static 'team/hel.png' %}" alt="Helaena Sanchez" style="border: 5px solid {{ user.profile.color}}; border-radius: 80%; width: 150px; height: 150px;">
             <div class="team-member-info" style="display: none;">
                 <h3 class="text-xl font-semibold" style="text-transform: uppercase;">Helaena Sanchez</h3>
                 <p>Email: hdsanchez1@student.hau.edu.ph</p>
@@ -164,14 +165,13 @@
         }
 
         .about-us {
-            width: 48%; /* Adjust the width as needed */
+            width: 48%;
         }
 
         .objectives {
-            width: 48%; /* Adjust the width as needed */
+            width: 48%;
         }
 
-        /* Rest of your CSS for the content */
     </style>
 
 {#  Dropdown Content#}
@@ -187,7 +187,7 @@
         }
 
         .dropdown.active .fas.fa-arrow-right::before {
-            content: "\f106"; /* FontAwesome caret-down icon */
+            content: "\f106";
         }
     </style>
 

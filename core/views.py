@@ -17,8 +17,6 @@ from .tokens import account_activation_token
 from verify_email.email_handler import send_verification_email
 
 
-
-
 # Create your views here.
 def index(request):
     items = Item.objects.filter(is_sold=False)[0:6]
@@ -31,24 +29,31 @@ def index(request):
     }
     return render(request, 'core/index.html', context)
 
+
 def contact(request):
     if request.method=="POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
         subject = request.POST.get("subject")
         comment = request.POST.get("comment")
-        query= Contact(name=name, email=email, subject=subject, comment=comment)
+        query = Contact(name=name, email=email, subject=subject, comment=comment)
         query.save()
         # messages.info(request, "Thanks For Reaching Us! We will get back you soon...")
         return redirect('/contact')
     return render(request, 'core/contact.html')
 
+
 def about(request):
     return render(request, 'core/about.html')
+
+
 def terms_of_use(request):
     return render(request, 'core/terms_of_use.html')
+
+
 def privacy_policy(request):
     return render(request, 'core/privacy_policy.html')
+
 
 #GINALAW
 def signup(request):
@@ -60,7 +65,7 @@ def signup(request):
             user = form.save(commit=False)
             user.is_active = False
             send_verification_email(request, form)
-            activateEmail(request, user, form.cleaned_data.get('email'))
+            # activateEmail(request, user, form.cleaned_data.get('email'))
             if user.is_active:
                 user.save()
             else:
@@ -73,22 +78,23 @@ def signup(request):
                 messages.error(request, error)
     return render(request, 'core/signup.html', {'form': SignupForm()})
 
-def activateEmail(request, user, email):
-    current_site = get_current_site(request)
-    mail_subject = 'Activate your account.'
-    user = get_user_model().objects.get(email=email)
-    message = render_to_string('core/acc_active_email.html', {
-        'user': user.username,
-        'domain': get_current_site(request).domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user),
-        'protocol': 'https' if request.is_secure() else 'http'
-    })
-    email = EmailMessage(mail_subject,message, settings.EMAIL_HOST_USER, to=[email])
-    if email.send():
-        messages.success(request, 'Please confirm your email address to complete the registration')
-    else:
-        messages.error(request, 'Failed to send email confirmation. Please try again later.')
+
+# def activateEmail(request, user, email):
+#     current_site = get_current_site(request)
+#     mail_subject = 'Activate your account.'
+#     user = get_user_model().objects.get(email=email)
+#     message = render_to_string('core/acc_active_email.html', {
+#         'user': user.username,
+#         'domain': get_current_site(request).domain,
+#         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+#         'token': account_activation_token.make_token(user),
+#         'protocol': 'https' if request.is_secure() else 'http'
+#     })
+#     email = EmailMessage(mail_subject,message, settings.EMAIL_HOST_USER, to=[email])
+#     if email.send():
+#         messages.success(request, 'Please confirm your email address to complete the registration')
+#     else:
+#         messages.error(request, 'Failed to send email confirmation. Please try again later.')
 
 
 def activate(request, uidb64, token):
@@ -100,13 +106,13 @@ def activate(request, uidb64, token):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
-        user.is_active=True
+        user.is_active = True
         user.save()
         messages.success(request, 'Thank you for your email confirmation.')
         return redirect('/login/')
     else:
+        print('asd.activate')
         messages.error(request, 'Activation link is invalid!')
-
 
 
 def logout(request):

@@ -1,19 +1,3 @@
-# from django.contrib.auth.decorators import login_required
-# from django.db.models import Q
-# from django.http import HttpResponseRedirect
-# from django.shortcuts import render, get_object_or_404, redirect
-# from django.urls import reverse_lazy
-#
-# from item.forms import NewItemForm, EditItemForm
-# from item.models import Item, Category, PriceRange
-# from profile.models import Location
-#
-#
-# from django.db.models import Q
-# from django.shortcuts import render
-# from item.models import Item, Category, PriceRange
-# from profile.models import Location
-
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, ExpressionWrapper, F, Count, fields
 from django.db.models.functions import Now
@@ -23,7 +7,6 @@ from django.urls import reverse_lazy
 
 from item.forms import NewItemForm, EditItemForm
 from item.models import Item, Category, PriceRange
-from profile.models import Location
 
 
 def items(request):
@@ -35,7 +18,6 @@ def items(request):
     max_price = request.GET.get('max_price', float('inf'))
 
     category = Category.objects.all()
-    locations = Location.objects.all()
     items = Item.objects.filter(is_sold=False)
     price_ranges = PriceRange.objects.all()
 
@@ -60,21 +42,32 @@ def items(request):
     else:
         items = items.order_by('-upvotes_count')  # Default to sorting by most upvoted items
 
+    print(category_ids)
+    for category_id in category_ids:
+        test = category.filter(id=category_id)
+        print(test)
 
     if category_ids:
         items = items.filter(category_id__in=category_ids)
 
+    # if category_ids:
+    #     items = items.filter(category_id__in=category_ids)
+
     if location_ids:
         items = items.filter(created_by__profile__location_id__in=location_ids)
 
-    if price_range_ids:
-        selected_price_ranges = PriceRange.objects.filter(id__in=price_range_ids)
-        price_filter = Q()
-        for price_range in selected_price_ranges:
-            price_filter |= Q(price__gte=price_range.min_price, price__lte=price_range.max_price)
-        items = items.filter(price_filter)
+    print(request.GET.get('min_value'))
+    minValue = request.GET.get('min_value')
+    maxValue = request.GET.get('max_value')
+
+    if minValue == maxValue:
+        print('Invalid price range')
+    elif minValue > maxValue:
+        print('Minimum must be lower than maximum')
     else:
-        items = items.filter(price__gte=min_price, price__lte=max_price)
+        items = items.filter(price__gte=minValue, price__lte=maxValue)
+
+        print(items)
 
     if query:
         items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
@@ -83,16 +76,12 @@ def items(request):
         'items': items,
         'query': query,
         'category': category,
-        'location': locations,
         'price_ranges': price_ranges,
         'selected_price_ranges': price_range_ids,
         'min_price': min_price,
         'max_price': max_price,
+        'test': category_ids,
     })
-
-
-
-
 
 
 # Create your views here.
@@ -132,6 +121,7 @@ def delete(request, pk):
     item = get_object_or_404(Item, pk=pk, created_by=request.user)
     item.delete()
     return HttpResponseRedirect(reverse_lazy('dashboard:index_d'))
+
 
 def EditItem(request, pk):
     item = get_object_or_404(Item, pk=pk, created_by=request.user)

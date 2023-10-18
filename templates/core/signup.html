@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
 <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
-    <h1 class="text-2xl text-center font-bold py-2">Sign Up</h1>
+    <h1 class="text-2xl text-center font-semibold py-2">SIGN UP</h1>
 
     <form method="post" action=".">
         {% csrf_token %}
@@ -66,12 +66,12 @@
             </div>
         {% endif %}
 
-
-        <button class="py-4 px-8 text-lg bg-red-800 hover:bg-red-950 rounded-xl font-semibold text-white">Submit</button>
-
-        <div class ="d-flex justify-content-center links">
-            Have an account? <a href="{% url 'login' %}">
-            Login</a>
+        <div class="flex justify-between items-center">
+            <button class="py-4 px-8 text-lg bg-red-800 hover:bg-red-950 rounded-xl font-semibold text-white">Submit</button>
+            <div class ="d-flex justify-content-center links ml-4">
+                Have an account? <a href="{% url 'login' %}" class="text-red-800 hover:underline">
+                Login</a>
+            </div>
         </div>
     </form>
 </div>

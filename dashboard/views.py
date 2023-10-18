@@ -7,7 +7,6 @@ from item.models import Item
 
 
 # Create your views here.
-
 @login_required
 def index_d(request):
     items = Item.objects.filter(created_by=request.user)

@@ -3,41 +3,50 @@
 {% block title %}Items{% endblock title %}
 
 {% block content %}
- <div class="pb-6 grid grid-cols-4 gap-4 bg-gray-100">
-        <div class ="col-span-1">
+    <div class="pb-6 grid grid-cols-4 gap-4 bg-gray-100">
+        <div class ="col-span-1" style="margin-left: 10px">
             <form method="get" action="{% url 'item:items' %}">
-                <input name="query" class="w-full py-4 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search for items">
-{#                <button class="mt-2 py-4 px-8 text-lg text-white rounded-xl" style="background: {{ user.profile.color }}">Search</button>#}
+                <input name="query" class="w-full py-4 px-6 border rounded-xl"
+                       style="margin-top: 10px;" type="text" value="{{ query }}" placeholder="Search for items">
 
                 <!-- Category filter -->
-                <p class="font-semibold text-xl">Categories</p>
+                <p class="font-semibold text-xl ml-2" style="margin-top: 10px">Categories</p>
                 <ul>
                     {% for category in category %}
-                        <li class="py-2 px-2 rounded-xl">
+                        <li class="py-2 px-2 rounded-xl ml-3">
                             <input type="checkbox" name="categories" value="{{ category.id }}" id="category_{{ category.id }}"
-                                   {% if category.id|stringformat:"s" in request.GET.categories %}checked{% endif %}>
+                                   {% if category.id|stringformat:"s" in test %}checked{% endif %}>
                             <label for="category_{{ category.id }}">{{ category.name }}</label>
                         </li>
                     {% endfor %}
                 </ul>
 
                 <!-- Price Range filter -->
-                <p class="font-semibold text-xl">Price Range</p>
+                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">PRICE RANGE</p>
                 <ul>
-                    {% for price_range in price_ranges %}
-                        <li class="py-2 px-2 rounded-xl">
-                            <input type="checkbox" name="price_ranges" value="{{ price_range.id }}" id="price_range_{{ price_range.id }}"
-                                   {% if price_range.id|stringformat:"s" in request.GET.price_ranges %}checked{% endif %}>
-                            <label for="price_range_{{ price_range.id }}">{{ price_range.name }}</label>
-                        </li>
-                    {% endfor %}
+                    <div class="flex space-x-2 ml-3" style="margin-top: 10px">
+                        <label for="MinPrice">Min Price:</label>
+                        <input type="number" id="min_value" name="min_value" class="border border-black">
+                    </div>
+
+                    <div class="flex space-x-2 ml-2 ml-3" style="margin-top: 10px">
+                        <label for="MaxPrice ml-3">Max Price:</label>
+                        <input type="number" id="max_value" name="max_value" class="border border-black">
+                    </div>
+
+{#                    {% for price_range in price_ranges %}#}
+{#                        <li class="py-2 px-2 rounded-xl">#}
+{#                            <input type="checkbox" name="price_ranges" value="{{ price_range.id }}" id="price_range_{{ price_range.id }}"#}
+{#                                   {% if price_range.id|stringformat:"s" in request.GET.price_ranges %}checked{% endif %}>#}
+{#                            <label for="price_range_{{ price_range.id }}">{{ price_range.name }}</label>#}
+{#                        </li>#}
+{#                    {% endfor %}#}
                 </ul>
 
-
                 <!-- Vote Filters -->
-                <p class="font-semibold text-xl">Vote Filters</p>
+                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">VOTE FILTERS</p>
                 <ul>
-                    <li class="py-2 px-2 rounded-xl">
+                    <li class="py-2 px-2 rounded-xl ml-3">
                         <input type="checkbox" name="upvoted" id="upvoted-checkbox" {% if request.GET.upvoted %}checked{% endif %}>
                         <label for="upvoted-checkbox">Most Upvoted</label>
                     </li>
@@ -47,12 +56,11 @@
 {#                    </li>#}
                 </ul>
 
-
                 <!-- Location filter -->
-                <p class="font-semibold text-xl">Preferred location</p>
+                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">LOCATION</p>
                 <ul>
                     {% for location in location %}
-                        <li class="py-2 px-2 rounded-xl">
+                        <li class="py-2 px-2 rounded-xl ml-3">
                             <input type="checkbox" name="locations" value="{{ location.id }}" id="location_{{ location.id }}"
                                    {% if location.id|stringformat:"s" in request.GET.locations %}checked{% endif %}>
                             <label for="location_{{ location.id }}">{{ location.name }}</label>
@@ -60,83 +68,43 @@
                     {% endfor %}
                 </ul>
 
-            <button class="mt-2 py-4 px-8 text-lg text-white rounded-xl" style="background: {{ user.profile.color }}">Search</button>
-{#                <hr class="my-6">#}
-{#                <input type="submit" class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white"#}
-{#                       style="background: {{ user.profile.color }}" value="Apply Filters">#}
+                <div class="flex space-x-2 ml-2" style="margin-top: 10px;">
+                    <button class="py-4 px-8 text-lg text-white rounded-xl ml-3" style="background: {{ user.profile.color }}" type="submit">Search</button>
+                    <a href="{% url 'item:items' %}" class="py-4 px-8 text-lg text-white rounded-xl" style="background: {{ user.profile.color }}">Clear all filters</a>
+                </div>
             </form>
 
-
-            <hr class="my-6">
-
-{#            <p class="font-semibold text-xl">Clear filters</p>#}
-
-            <ul>
-                <li class="py-2 px-2 rounded-xl">
-                    <a href="{% url 'item:items' %}" class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white" style="background: {{ user.profile.color }}">Clear all filters</a>
-                </li>
-            </ul>
+{#            <ul>#}
+{#                <li class="rounded-xl">#}
+{#                    <a href="{% url 'item:items' %}" #}
+{#                       class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white" #}
+{#                       style="background: {{ user.profile.color }}; margin-left: 170px">Clear all filters</a>#}
+{#                </li>#}
+{#            </ul>#}
 
         </div>
 
-        <div class="col-span-3">
+        <div class="col-span-3" style="margin-top: 10px; margin-right: 20px">
             <div class="grid grid-cols-3 gap-3">
                 {% for item in items %}
-                    <div>
+                    <div class="flex">
                         <a href="{% url 'item:detail' item.id %}">
-                            <div>
-                                <img src="{{ item.image.url }}" class="rounded-t-xl">
-                            </div>
-
-                            <div class="p-6 bg-white rounded-b-xl">
-                                <h2 class="text-2xl">{{ item.name }}</h2>
-                                <p class ="text-gray-500">First name:{{ item.created_by.first_name }}</p>
-                                <p class ="text-gray-500">Last name:{{ item.created_by.last_name }}</p>
-                                <p class="text-gray-500">Price: {{ item.price }}</p>
-                                <p class="text-gray-500">Category: {{ item.category.name }}</p>
-                                <!-- Display the location of the user who posted the item -->
-                                <p class="text-gray-500">Location: {{ item.created_by.profile.location.name }}</p>
-                                <p class ="text-gray-500">Upvotes: {{ item.created_by.profile.upvotes }}</p>
-                                <p class ="text-gray-500">Downvotes: {{ item.created_by.profile.downvotes }}</p>
+                            <div class="bg-white rounded-lg overflow-hidden shadow-md flex">
+                                <img src="{{ item.image.url }}" class="w-32 h-32 object-cover rounded-t-xl m-auto">
+                                <div class="p-4">
+                                    <h2 class="text-lg font-bold uppercase">{{ item.name }}</h2>
+                                    <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
+                                    <p class="text-gray-500 text-sm">Category: {{ item.category.name }}</p>
+                                    <p class="text-gray-500 text-sm">Location: {{ item.created_by.profile.location.name }}</p>
+                                    <p class="text-gray-500 text-sm">Upvotes: {{ item.created_by.profile.upvotes }}</p>
+                                    <p class="text-gray-500 text-sm">Downvotes: {{ item.created_by.profile.downvotes }}</p>
+                                </div>
                             </div>
                         </a>
                     </div>
                 {% endfor %}
             </div>
         </div>
+
     </div>
-
-
-{#            <hr class ="my-6">#}
-{##}
-{#            <p class="font-semibold text-xl">Clear filters</p>#}
-{##}
-{#            <ul>#}
-{#                <li class="py-2 px-2 rounded-xl">#}
-{#                    <a href="{% url 'item:items' %}" class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white bg-red-800">Clear all filters</a>#}
-{#                </li>#}
-{#            </ul>#}
-{##}
-{#        </div>#}
-{##}
-{#        <div class="col-span-3">#}
-{#            <div class="grid grid-cols-3 gap-3">#}
-{#            {% for item in items %}#}
-{#                <div>#}
-{#                    <a href="{% url 'item:detail' item.id %}">#}
-{#                        <div>#}
-{#                            <img src="{{ item.image.url }}" class="rounded-t-xl">#}
-{#                        </div>#}
-{##}
-{#                        <div class="p-6 bg-white rounded-b-xl">#}
-{#                            <h2 class="text-2xl">{{ item.name }}</h2>#}
-{#                            <p class="text-gray-500">Price: {{ item.price }}</p>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                </div>#}
-{#            {% endfor %}#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-
 {% endblock content %}

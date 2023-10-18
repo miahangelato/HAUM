@@ -22,9 +22,6 @@ def profile(request, username):
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES,
                                    instance=request.user.profile)
-        # print(request.POST)
-        # color_form = ColorPreferenceForm(request.POST, instance=profile)
-        # Removed the color form. Not needed since it is being called from the p_form
         font_form = FontPreferenceForm(request.POST, instance=request.user.profile)
         if u_form.is_valid() and p_form.is_valid() and font_form.is_valid():
             # request.user.save()
@@ -44,7 +41,6 @@ def profile(request, username):
         print(profile)
         u_form = UserUpdateForm(instance=user)
         p_form = ProfileUpdateForm(instance=profile)
-
 
     user_profile_color = profile.color
     is_own_profile = user == request.user
@@ -118,6 +114,7 @@ def upvote(request, username):
         messages.success(request, f'You have upvoted {target_user.username}!')  # Display a success message
 
     return redirect('profile', username=username)  # Redirect to the profile page of the user who is being upvoted
+
 
 # Downvote view
 @login_required

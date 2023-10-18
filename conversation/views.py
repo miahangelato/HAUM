@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.checks import messages
 from django.shortcuts import render, get_object_or_404, redirect
 
 from conversation.forms import ConversationMessageForm
@@ -42,7 +43,7 @@ def new_conversation(request, item_pk):
     })
 
 @login_required
-def inbox (request):
+def inbox(request):
     conversations = Conversation.objects.filter(members=request.user)
     return render(request, 'conversation/inbox.html', {
         'conversations': conversations,
@@ -71,3 +72,17 @@ def detail_conversation(request, pk):
         'conversation': conversation,
         'form': form,
     })
+
+
+@login_required
+def delete_conversation(request, pk):
+    conversation = get_object_or_404(Conversation, pk=pk)
+
+    # Ensure that only the user who is a member of the conversation can delete it
+    if request.user in conversation.members.all():
+        conversation.members.remove(request.user)
+        messages.success(request, "Conversation removed from inbox.")
+    else:
+        messages.error(request, "You do not have permission to delete this conversation.")
+
+    return redirect('conversation:inbox')
