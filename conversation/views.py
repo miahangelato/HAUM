@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from conversation.forms import ConversationMessageForm
 from conversation.models import Conversation
 from item.models import Item
+from django.contrib import messages
 
 
 # Create your views here.

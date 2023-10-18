@@ -82,8 +82,15 @@ class SignupForm(UserCreationForm):
 
         return username
 
-
 class Contact(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ['name', 'email', 'subject', 'comment']
+
+#
+# class newLink (forms.ModelForm):
+#
+#     class Meta:
+#         model = User
+#         fields = ['newLink']
+

@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from core import views
 from .forms import LoginForm
-
+from .views import request_new_activation_link
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -13,7 +13,8 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('login/', auth_views.LoginView.as_view(template_name='core/login.html', authentication_form=LoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    # path('activate/<uidb64>/<token>/', views.activate, name='activate'),
+    path('activate/<str:uidb64>/<str:token>/', views.activate, name='activate'),
+    path('request-activation-link/', request_new_activation_link, name='request_new_activation_link'),
 
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name="core/password_reset.html"), name='password_reset'),
 

@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django_registration.forms import User
 
 from G4Marketplace import settings
 from item.models import Category, Item
@@ -59,60 +60,79 @@ def privacy_policy(request):
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
-        print('requiett method')
         if form.is_valid():
-            print('form is valid')
-            user = form.save(commit=False)
+            user = form.save()
             user.is_active = False
-            send_verification_email(request, form)
-            # activateEmail(request, user, form.cleaned_data.get('email'))
-            if user.is_active:
-                user.save()
-            else:
-                pass
+            user.save()
 
-            return redirect('/login/')
+            # Send activation email
+            send_activation_email(request, user)
+            return redirect('request_new_activation_link')
 
-        else:
-            for error in list(form.errors.values()):
-                messages.error(request, error)
-    return render(request, 'core/signup.html', {'form': SignupForm()})
+    else:
+        form = SignupForm()
 
+    return render(request, 'core/signup.html', {'form': form})
 
-# def activateEmail(request, user, email):
-#     current_site = get_current_site(request)
-#     mail_subject = 'Activate your account.'
-#     user = get_user_model().objects.get(email=email)
-#     message = render_to_string('core/acc_active_email.html', {
-#         'user': user.username,
-#         'domain': get_current_site(request).domain,
-#         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#         'token': account_activation_token.make_token(user),
-#         'protocol': 'https' if request.is_secure() else 'http'
-#     })
-#     email = EmailMessage(mail_subject,message, settings.EMAIL_HOST_USER, to=[email])
-#     if email.send():
-#         messages.success(request, 'Please confirm your email address to complete the registration')
-#     else:
-#         messages.error(request, 'Failed to send email confirmation. Please try again later.')
+def send_activation_email(request, user):
+    current_site = get_current_site(request)
+    mail_subject = 'Activate your account.'
+    message = render_to_string('core/acc_active_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': user.pk,  # No need for encoding here
+        'token': account_activation_token.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http',
+    })
 
+    email = EmailMessage(mail_subject, message, settings.EMAIL_HOST_USER, to=[user.email])
+
+    if email.send():
+        messages.success(request, 'Please confirm your email address to complete the registration')
+    else:
+        messages.error(request, 'Failed to send email confirmation. Please try again later.')
 
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
+        uid = uidb64  # No need for decoding here
         user = User.objects.get(pk=uid)
-    except:
+    except (User.DoesNotExist, ValueError):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
         messages.success(request, 'Thank you for your email confirmation.')
-        return redirect('/login/')
-    else:
-        print('asd.activate')
-        messages.error(request, 'Activation link is invalid!')
+        return redirect('login')
+
+    messages.error(request, 'Activation link is invalid!')
+    return HttpResponse('Activation link is invalid.')
+
+def request_new_activation_link(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+            if not user.is_active:
+                # Check the number of resend attempts
+                resend_attempts = request.session.get('resend_attempts', 0)
+                if resend_attempts >= 3:
+                    messages.error(request, 'You have reached the maximum number of resend attempts.')
+                else:
+                    send_activation_email(request, user)
+                    messages.success(request, 'A new activation link has been sent to your email address.')
+                    # Increase the resend attempts count
+                    request.session['resend_attempts'] = resend_attempts + 1
+            else:
+                messages.warning(request, 'Your account is already active.')
+        except User.DoesNotExist:
+            messages.error(request, 'User with that email address does not exist.')
+
+    return render(request, 'core/request_activation_link.html')
+
+
+
 
 
 def logout(request):
