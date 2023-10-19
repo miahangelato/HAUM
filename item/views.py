@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 
 from item.forms import NewItemForm, EditItemForm
 from item.models import Item, Category, PriceRange
+from profile.models import Location
 
 
 def items(request):
@@ -18,6 +19,7 @@ def items(request):
     max_price = request.GET.get('max_price', float('inf'))
 
     category = Category.objects.all()
+    locations = Location.objects.all()
     items = Item.objects.filter(is_sold=False)
     price_ranges = PriceRange.objects.all()
 
@@ -53,6 +55,11 @@ def items(request):
     # if category_ids:
     #     items = items.filter(category_id__in=category_ids)
 
+    # print(location_ids)
+    # for location_id in location_ids:
+    #     test = category.filter(id=location_id)
+    #     print(test)
+
     if location_ids:
         items = items.filter(created_by__profile__location_id__in=location_ids)
 
@@ -76,6 +83,7 @@ def items(request):
         'items': items,
         'query': query,
         'category': category,
+        'location': locations,
         'price_ranges': price_ranges,
         'selected_price_ranges': price_range_ids,
         'min_price': min_price,

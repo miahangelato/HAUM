@@ -57,11 +57,23 @@
                 </ul>
 
                 <!-- Location filter -->
-                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">LOCATION</p>
+                <p class="font-semibold text-xl">Preferred location</p>
                 <ul>
                     {% for location in location %}
-                        <li class="py-2 px-2 rounded-xl ml-3">
+                        <li class="py-2 px-2 rounded-xl">
                             <input type="checkbox" name="locations" value="{{ location.id }}" id="location_{{ location.id }}"
+                                   {% if location.id|stringformat:"s" in request.GET.locations %}checked{% endif %}>
+                            <label for="location_{{ location.id }}">{{ location.name }}</label>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+
+                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">LOCATION</p>
+                <ul>
+                    {% for locations in locations %}
+                        <li class="py-2 px-2 rounded-xl ml-3">
+                            <input type="checkbox" name="locations" value="{{ locations.id }}" id="location_{{ locations.id }}"
                                    {% if location.id|stringformat:"s" in request.GET.locations %}checked{% endif %}>
                             <label for="location_{{ location.id }}">{{ location.name }}</label>
                         </li>

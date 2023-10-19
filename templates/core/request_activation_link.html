@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Resend Verification Code{% endblock %}
+
+{% block content %}
+<div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+    <h1 class="text-2xl text-center font-bold py-2">Resend Verification Code</h1>
+
+    <form method="post" action="{% url 'request_new_activation_link' %}">
+        {% csrf_token %}
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Resend Activation Link
+        </button>
+    </form>
+
+    <!-- Message about re-sending verification -->
+    <div class="mt-3 text-center text-gray-600">
+        If you haven't received your verification code or your verification link has expired, click the Resend Verification Code button.
+    </div>
+</div>
+{% endblock %}

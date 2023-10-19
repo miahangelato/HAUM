@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from core import views
@@ -14,7 +15,10 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='core/login.html', authentication_form=LoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('activate/<str:uidb64>/<str:token>/', views.activate, name='activate'),
-    path('request-activation-link/', request_new_activation_link, name='request_new_activation_link'),
+
+
+    path('request_new_activation_link/', request_new_activation_link, name='request_new_activation_link'),
+    path('request_new_activation_link/<str:email>/', request_new_activation_link, name='request_new_activation_link_with_email'),
 
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name="core/password_reset.html"), name='password_reset'),
 
