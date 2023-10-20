@@ -1,21 +1,25 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Resend Verification Code{% endblock %}
+{% block title %}Request New Activation Link {% endblock %}
 
 {% block content %}
-<div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
-    <h1 class="text-2xl text-center font-bold py-2">Resend Verification Code</h1>
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <h1 class="text-2xl text-center font-bold py-2">Request New Activation Link</h1>
 
-    <form method="post" action="{% url 'request_new_activation_link' %}">
-        {% csrf_token %}
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Resend Activation Link
-        </button>
-    </form>
+        <form method="post" action="{% url 'request_new_activation_link' %}">
+            {% csrf_token %}
 
-    <!-- Message about re-sending verification -->
-    <div class="mt-3 text-center text-gray-600">
-        If you haven't received your verification code or your verification link has expired, click the Resend Verification Code button.
+            <div class="mb-3">
+                <label class="d-inline-block mb-2">Email</label><br>
+                <input type="email" name="email" required>
+            </div>
+
+            <button class="py-4 px-8 text-lg bg-red-800 hover:bg-red-950 rounded-xl font-semibold text-white">Request Link</button>
+        </form>
+
+        <!-- Message about re-sending verification -->
+        <div class="mt-3 text-center text-gray-600">
+            If you haven't received your verification link or your verification link has expired, click the Re-send verification link.
+        </div>
     </div>
-</div>
 {% endblock %}

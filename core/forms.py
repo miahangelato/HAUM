@@ -94,3 +94,4 @@ class Contact(forms.ModelForm):
 #         model = User
 #         fields = ['newLink']
 
+
