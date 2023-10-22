@@ -24,6 +24,68 @@
         </div>
     </div>
 
+  {% if request.user.is_superuser %}
+    <table class="border border-collapse w-full md:w-3/4 xl:w-1/2">
+        <thead>
+            <tr>
+                <th class="border p-2">Profile Picture</th>
+                <th class="border p-2">Username</th>
+                <th class="border p-2">Email</th>
+                <th class="border p-2">First Name</th>
+                <th class="border p-2">Last Name</th>
+                <th class ="border p-2">Location</th>
+                <th class="border p-2">Staff Status</th>
+                <th class="border p-2">Profile</th>
+                <th class="border p-2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td class="border p-2">
+                        <img src="{{ user.profile.image.url}}" alt="Profile Picture" class="w-12 h-12 rounded-full">
+                    </td>
+                    <td class="border p-2">{{ user.username }}</td>
+                    <td class="border p-2">{{ user.email }}</td>
+                    <td class="border p-2">{{ user.profile.first_name }}</td>
+                    <td class="border p-2">{{ user.profile.last_name }}</td>
+                    <td class="border p-2">{{ user.profile.location }}</td>
+                    <td class="border p-2">{{ user.is_staff }}</td>
+                    <td class="border p-2">
+
+                        <a href="{% url 'profile' username=user.username %}">
+                            <button class="bg-blue-800 hover:bg-blue-950 text-white py-2 px-4 rounded-lg">
+                                View Profile
+                            </button>
+                        </a>
+                    </td>
+                    <td class="border p-2">
+                        <a href="{% url 'dashboard:delete_user' user.id %}">
+                            <button class="bg-red-800 hover:bg-red-950 text-white py-2 px-4 rounded-lg">
+                                Delete User
+                            </button>
+                        </a>
+                    </td>
+                    <td class="border p-2">
+                        <a href="{% url 'dashboard:edit_user' user.id %}">
+                            <button class="bg-blue-800 hover:bg-blue-950 text-white py-2 px-4 rounded-lg">
+                                Edit User
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="flex justify-center mt-4">
+        <a href="{% url 'dashboard:add_user' %}">
+            <button class="bg-red-800 hover:bg-red-950 text-white py-2 px-4 rounded-lg">Add User</button>
+        </a>
+    </div>
+{% endif %}
+
+
+
 {#    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">#}
 {#        <h2 class="mb-12 text-2xl text-center">Categories</h2>#}
 {##}

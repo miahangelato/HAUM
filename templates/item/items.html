@@ -11,12 +11,24 @@
 
                 <!-- Category filter -->
                 <p class="font-semibold text-xl ml-2" style="margin-top: 10px">Categories</p>
+                {% if request.user.is_superuser %}
+{#                    tanggal din form kase nasasama yon sa submit#}
+                    <a href="{% url 'item:add_category' %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">Add Category</a>
+                {% endif %}
                 <ul>
                     {% for category in category %}
                         <li class="py-2 px-2 rounded-xl ml-3">
                             <input type="checkbox" name="categories" value="{{ category.id }}" id="category_{{ category.id }}"
-                                   {% if category.id|stringformat:"s" in test %}checked{% endif %}>
+                                {% if category.id|stringformat:"s" in test %}checked{% endif %}>
                             <label for="category_{{ category.id }}">{{ category.name }}</label>
+                        {% if request.user.is_superuser %}
+                            <a href="{% url 'item:edit_category' category.id %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">
+                                Edit
+                            </a>
+                            <a href="{% url 'item:deleteCategory' category.id %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">
+                                Delete
+                            </a>
+                        {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
@@ -33,6 +45,7 @@
                         <label for="MaxPrice ml-3">Max Price:</label>
                         <input type="number" id="max_value" name="max_value" class="border border-black">
                     </div>
+                </ul>
 
 {#                    {% for price_range in price_ranges %}#}
 {#                        <li class="py-2 px-2 rounded-xl">#}
@@ -41,7 +54,7 @@
 {#                            <label for="price_range_{{ price_range.id }}">{{ price_range.name }}</label>#}
 {#                        </li>#}
 {#                    {% endfor %}#}
-                </ul>
+
 
                 <!-- Vote Filters -->
                 <p class="font-semibold text-xl ml-2" style="margin-top: 30px">VOTE FILTERS</p>
@@ -56,30 +69,32 @@
 {#                    </li>#}
                 </ul>
 
-                <!-- Location filter -->
-                <p class="font-semibold text-xl">Preferred location</p>
+
+
+
+                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">LOCATION</p>
+                {% if request.user.is_superuser %}
+{#                    tanggal form kase nasasama yon sa submit#}
+                    <a href="{% url 'item:add_location' %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">Add Location</a>
+                {% endif %}
                 <ul>
                     {% for location in location %}
-                        <li class="py-2 px-2 rounded-xl">
+                        <li class="py-2 px-2 rounded-xl ml-3">
                             <input type="checkbox" name="locations" value="{{ location.id }}" id="location_{{ location.id }}"
                                    {% if location.id|stringformat:"s" in request.GET.locations %}checked{% endif %}>
                             <label for="location_{{ location.id }}">{{ location.name }}</label>
                         </li>
+                        {% if request.user.is_superuser %}
+                            <a href="{% url 'item:edit_location' location.id %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">
+                                Edit
+                            </a>
+                            <a href="{% url 'item:deleteLocation' location.id %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">
+                                Delete
+                            </a>
+                        {% endif %}
                     {% endfor %}
                 </ul>
-
-
-                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">LOCATION</p>
-                <ul>
-                    {% for locations in locations %}
-                        <li class="py-2 px-2 rounded-xl ml-3">
-                            <input type="checkbox" name="locations" value="{{ locations.id }}" id="location_{{ locations.id }}"
-                                   {% if location.id|stringformat:"s" in request.GET.locations %}checked{% endif %}>
-                            <label for="location_{{ location.id }}">{{ location.name }}</label>
-                        </li>
-                    {% endfor %}
-                </ul>
-
+{##}
                 <div class="flex space-x-2 ml-2" style="margin-top: 10px;">
                     <button class="py-4 px-8 text-lg text-white rounded-xl ml-3" style="background: {{ user.profile.color }}" type="submit">Search</button>
                     <a href="{% url 'item:items' %}" class="py-4 px-8 text-lg text-white rounded-xl" style="background: {{ user.profile.color }}">Clear all filters</a>
@@ -88,8 +103,8 @@
 
 {#            <ul>#}
 {#                <li class="rounded-xl">#}
-{#                    <a href="{% url 'item:items' %}" #}
-{#                       class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white" #}
+{#                    <a href="{% url 'item:items' %}"#}
+{#                       class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white"#}
 {#                       style="background: {{ user.profile.color }}; margin-left: 170px">Clear all filters</a>#}
 {#                </li>#}
 {#            </ul>#}

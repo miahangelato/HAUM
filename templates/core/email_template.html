@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Contact Us - HAU Marketplace{% endblock %}
+
+{% block content %}
+
+<body>
+    <h1>Contact Us</h1>
+    <p>Name: {{ name }}</p>
+    <p>Email: {{ email }}</p>
+    <p>Subject: {{ subject }}</p>
+    <p>Comment: {{ comment }}</p>
+
+    <!-- Add a "Reply" button -->
+    <a href="mailto:{{ email }}?subject=Re: {{ subject }}&body=Hi {{ name }},%0D%0A%0D%0A">
+        <button style="background-color: #58151c; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
+            Reply
+        </button>
+    </a>
+</body>
+
+{% endblock content %}

@@ -2,11 +2,12 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
+from django.utils.html import strip_tags
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django_registration.forms import User
 
@@ -33,17 +34,59 @@ def index(request):
     return render(request, 'core/index.html', context)
 
 
+from django.shortcuts import render, redirect
+from .models import Contact
+
 def contact(request):
-    if request.method=="POST":
+    contacts = None  # Initialize the variable outside of the if block
+
+    if request.user.is_superuser:
+        contacts = Contact.objects.all()
+
+    if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
         subject = request.POST.get("subject")
         comment = request.POST.get("comment")
         query = Contact(name=name, email=email, subject=subject, comment=comment)
         query.save()
-        # messages.info(request, "Thanks For Reaching Us! We will get back you soon...")
+        # messages.info(request, "Thanks For Reaching Us! We will get back to you soon...")
         return redirect('/contact')
-    return render(request, 'core/contact.html')
+
+    return render(request, 'core/contact.html', {'contacts': contacts})
+
+
+def send_email(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        comment = request.POST.get('comment')
+        subject = request.POST.get('subject')
+
+        if subject and comment and email:
+            message_data = {
+                'name': name,
+                'email': email,
+                'comment': comment,
+                'subject': subject,
+            }
+
+            html_message = render_to_string('core/email_template.html', message_data)
+            plain_message = strip_tags(html_message)
+
+            try:
+                send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [email], html_message=html_message)
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+
+            return redirect('success')
+
+    # Return an HttpResponse or render a response for GET requests or if the form data is not valid.
+    return HttpResponse('Invalid form data')
+
+
+
+
 
 
 def about(request):

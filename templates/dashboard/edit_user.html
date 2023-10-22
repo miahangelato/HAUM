@@ -1,0 +1,54 @@
+{% extends "core/base.html" %}
+{% block title %}Edit User{% endblock title %}
+{% block content %}
+<h2>Edit User</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-4">
+        <label for="id_first_name">Username:</label>
+        {{ user_form.username }}
+    </div>
+    <div class="mb-4">
+        <label for="id_first_name">First Name:</label>
+        {{ form.first_name }}
+    </div>
+    <div class="mb-4">
+        <label for="id_last_name">Last Name:</label>
+        {{ form.last_name }}
+    </div>
+    <div class="mb-4">
+        <label for="id_bio">Bio:</label>
+        {{ form.bio }}
+    </div>
+    <div class="mb-4">
+        <label for="id_location">Location:</label>
+        {{ form.location }}
+    </div>
+    <div class="mb-4">
+        <label for="id_address">Address:</label>
+        {{ form.address }}
+    </div>
+    <div class="mb-4">
+        <label for="id_first_name">Username:</label>
+        {{ user_form.email}}
+    </div>
+    <div class="mb-4">
+        <label for="id_first_name">Username:</label>
+        {{ user_form.username }}
+    </div>
+{#    <div class="mb-4">#}
+{#        <label for="id_color">Color:</label>#}
+{#        {{ form.color }}#}
+{#    </div>#}
+{#    <div class="mb-4">#}
+{#        <label for="id_font_preference">Font Preference:</label>#}
+{#        {{ form.font_preference }}#}
+{#    </div>#}
+{#    <div class="mb-4">#}
+{#        <label for="id_image">Image:</label>#}
+{#        {{ form.image }}#}
+{#    </div>#}
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Save</button>
+</form>
+
+{% endblock %}

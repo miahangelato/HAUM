@@ -28,7 +28,6 @@ class Profile(models.Model):
     upvotes = models.PositiveIntegerField(default=0)
     downvotes = models.PositiveIntegerField(default=0)
 
-
     def __str__(self):
         return f'{self.user.username} Profile'
     # display nya username profile

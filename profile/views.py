@@ -16,6 +16,8 @@ def profile(request, username):
     color_form = ColorPreferenceForm(instance=profile)
     locations = Location.objects.all()
     font_form = FontPreferenceForm(instance=request.user.profile)
+    login_history = user.active_logins
+    print(login_history)
 
     if request.method == 'POST':
         print("post method")
@@ -37,8 +39,8 @@ def profile(request, username):
         user = User.objects.get(username=username)
         form = FontPreferenceForm(instance=request.user.profile)
         profile = Profile.objects.get(user=user)
-        print(user)
-        print(profile)
+        print(user.first_name)
+        print(profile.first_name)
         u_form = UserUpdateForm(instance=user)
         p_form = ProfileUpdateForm(instance=profile)
 
@@ -68,7 +70,8 @@ def profile(request, username):
         'form': font_form,
 
         'locations': locations,
-        'color_form': color_form
+        'color_form': color_form,
+        'login_history': login_history
 
     }
 

@@ -4,13 +4,15 @@ from django.db.models.functions import Now
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.views.generic import UpdateView
 
-from item.forms import NewItemForm, EditItemForm
+from item.forms import NewItemForm, EditItemForm, CategoryForm, addCategory, addLocation, LocationForm
 from item.models import Item, Category, PriceRange
 from profile.models import Location
 
 
 def items(request):
+    # print('asd')
     query = request.GET.get('query', '')
     category_ids = request.GET.getlist('categories')  # Get a list of selected category IDs
     location_ids = request.GET.getlist('locations')  # Get a list of selected location IDs
@@ -126,26 +128,93 @@ def NewItem(request):
 
 @login_required
 def delete(request, pk):
-    item = get_object_or_404(Item, pk=pk, created_by=request.user)
-    item.delete()
-    return HttpResponseRedirect(reverse_lazy('dashboard:index_d'))
+    item = get_object_or_404(Item, pk=pk)
+
+    # Check if the user is the owner or a superuser before deleting
+    if request.user == item.created_by:
+        item.delete()
+        return redirect('dashboard:index_d')
+
+    if request.user.is_authenticated:
+        item.delete()
+        return redirect('item:items')
 
 
 def EditItem(request, pk):
-    item = get_object_or_404(Item, pk=pk, created_by=request.user)
+    item = get_object_or_404(Item, pk=pk)
+    if request.user == item.created_by or request.user.is_superuser:
 
+        if request.method == 'POST':
+            form = EditItemForm(request.POST, request.FILES, instance=item)
+
+            if form.is_valid():
+                form.save()
+                return redirect('item:detail', pk=item.pk)
+
+        else:
+            form = EditItemForm(instance=item)
+
+        return render(request, 'item/new_item.html', {
+            'form': form,
+            'title': 'Edit Item'
+        })
+
+def add_categories(request):
     if request.method == 'POST':
-        form = EditItemForm(request.POST, request.FILES, instance=item)
+        form = addCategory(request.POST, request.FILES)  # Use 'form' instead of 'forms'
 
         if form.is_valid():
-            form.save()
+            category = form.save(commit=False)
+            category.save()
 
-            return redirect('item:detail', pk=item.pk)
+            return redirect('item:items')
 
     else:
-        form = EditItemForm(instance=item)
+        form = addCategory()  # Initialize 'form' for GET requests
 
-    return render(request, 'item/new_item.html', {
+    return render(request, 'item/add_category.html', {
         'form': form,
-        'title': 'Edit Item'
     })
+
+class CategoryUpdateView(UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'item/edit_category.html'
+    success_url = reverse_lazy('item:items')
+
+def deleteCategory(request, cat_id):
+    if request.user.is_superuser:
+        category = get_object_or_404(Category, pk=cat_id)
+        category.delete()
+        return HttpResponseRedirect(reverse_lazy('item:items'))
+
+def add_location(request):
+    if request.method == 'POST':
+        form = addLocation(request.POST, request.FILES)  # Use 'form' instead of 'forms'
+
+        if form.is_valid():
+            location = form.save(commit=False)
+            location.save()
+
+            return redirect('item:items')
+
+    else:
+        form = addLocation()  # Initialize 'form' for GET requests
+
+    return render(request, 'item/add_location.html', {
+        'form': form,
+    })
+
+class LocationUpdateView(UpdateView):
+    model = Location
+    form_class = LocationForm
+    template_name = 'item/edit_location.html'
+    success_url = reverse_lazy('item:items')
+
+def deleteLocation(request, loc_id):
+    if request.user.is_superuser:
+        location = get_object_or_404(Location, pk=loc_id)
+        location.delete()
+        return HttpResponseRedirect(reverse_lazy('item:items'))
+
+
