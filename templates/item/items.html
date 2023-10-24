@@ -82,7 +82,7 @@
                     {% for location in location %}
                         <li class="py-2 px-2 rounded-xl ml-3">
                             <input type="checkbox" name="locations" value="{{ location.id }}" id="location_{{ location.id }}"
-                                   {% if location.id|stringformat:"s" in request.GET.locations %}checked{% endif %}>
+                                   {% if location.id|stringformat:"s" in test2 %}checked{% endif %}>
                             <label for="location_{{ location.id }}">{{ location.name }}</label>
                         </li>
                         {% if request.user.is_superuser %}

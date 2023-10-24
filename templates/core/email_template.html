@@ -3,20 +3,25 @@
 {% block title %}Contact Us - HAU Marketplace{% endblock %}
 
 {% block content %}
+<div class="container flex items-center justify-center">
+    <div class="row min-h-full">
+        <div class="col-md-6 offset-md-3">
+            <div class="contact-form">
+                <h1 class="text-center">Contact Us</h1>
+                <div class="contact-details">
+                    <p><strong>Name:</strong> {{ name }}</p>
+                    <p><strong>Email:</strong> {{ email }}</p>
+                    <p><strong>Subject:</strong> {{ subject }}</p>
+                    <p><strong>Comment:</strong> {{ comment }}</p>
+                </div>
 
-<body>
-    <h1>Contact Us</h1>
-    <p>Name: {{ name }}</p>
-    <p>Email: {{ email }}</p>
-    <p>Subject: {{ subject }}</p>
-    <p>Comment: {{ comment }}</p>
-
-    <!-- Add a "Reply" button -->
-    <a href="mailto:{{ email }}?subject=Re: {{ subject }}&body=Hi {{ name }},%0D%0A%0D%0A">
-        <button style="background-color: #58151c; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
-            Reply
-        </button>
-    </a>
-</body>
-
+                <!-- Add a "Reply" button -->
+                <a href="mailto:{{ email }}?subject=Re: {{ subject }}&body=Hi {{ name }},%0D%0A%0D%0A"
+                   class="btn btn-primary mb-5">
+                    Reply
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

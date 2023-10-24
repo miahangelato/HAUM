@@ -48,15 +48,15 @@ def items(request):
     else:
         items = items.order_by('-upvotes_count')  # Default to sorting by most upvoted items
 
-    print(category_ids)
+    print(category_ids, location_ids)
     for category_id in category_ids:
         test = category.filter(id=category_id)
-        # test2 = category.get(id=location_id)
-        print(test)
+        test2 = category.get(id=location_ids)
+        print(test,test2)
 
     if category_ids:
         items = items.filter(category_id__in=category_ids)
-        # locations = locations.get(id__in=location_ids)
+        locations = locations.get(id__in=location_ids)
 
 
 
@@ -111,7 +111,7 @@ def items(request):
         'min_price': min_price,
         'max_price': max_price,
         'test': category_ids,
-        # 'test2': location_ids,
+        'test2': location_ids,
     })
 
 

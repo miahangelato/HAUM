@@ -35,9 +35,6 @@ def index(request):
     return render(request, 'core/index.html', context)
 
 
-from django.shortcuts import render, redirect
-from .models import Contact
-
 def contact(request):
     contacts = None  # Initialize the variable outside of the if block
 
