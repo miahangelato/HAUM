@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage, send_mail, BadHeaderError
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -41,7 +42,7 @@ def contact(request):
     contacts = None  # Initialize the variable outside of the if block
 
     if request.user.is_superuser:
-        contacts = Contact.objects.all()
+        contacts = Contact.objects.all().order_by('created_at')
 
     if request.method == "POST":
         name = request.POST.get("name")
@@ -55,36 +56,67 @@ def contact(request):
 
     return render(request, 'core/contact.html', {'contacts': contacts})
 
+# def contact_list(request):
+#     queryset = Contact.objects.all().order_by('created_at')
+#     paginator = Paginator(queryset, 10)  # Show 25 contacts per page
+#
+#     page= request.GET.get('page')
+#     try:
+#         contacts= paginator.page('page')
+#     except PageNotAnInteger:
+#         contacts= paginator.page(1)
+#     except EmptyPage:
+#         contacts= paginator.page(paginator.num_pages)
+#
+#     context = {
+#         "object_list": queryset,
+#         "contacts": contacts,
+#     }
+#     return render(request, "core/contact_list.html", context)
 
-def send_email(request):
+
+def send_email(request, subject, email, name):
+    subject = ('Re:' + subject)
+    email = email
+    name = name
+    # comment = comment
+    print(subject)
+
     if request.method == "POST":
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        comment = request.POST.get('comment')
-        subject = request.POST.get('subject')
+        print("request.POST")
+        message = request.POST.get("message")
+        message_data = {
+            'name': name,
+            'email': email,
+            'comment': message,
+            # 'comment': comment,
+            'subject': subject,
 
-        if subject and comment and email:
-            message_data = {
-                'name': name,
-                'email': email,
-                'comment': comment,
-                'subject': subject,
-            }
+        }
+        html_message = render_to_string('core/email_template.html', message_data)
+        plain_message = strip_tags(html_message)
 
-            html_message = render_to_string('core/email_template.html', message_data)
-            plain_message = strip_tags(html_message)
-
+        if subject and message and email:
             try:
                 send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [email], html_message=html_message)
+                return redirect('/')
+                # return render(request, 'core/contact.html', {'message': 'Message sent successfully'})
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
-
-            return redirect('success')
-
-    # Return an HttpResponse or render a response for GET requests or if the form data is not valid.
-    return HttpResponse('Invalid form data')
-
-
+                # return render("core:contact-list")
+                # return redirect('success')
+        else:
+            return HttpResponse('Invalid form data')
+    context = {
+        'subject': subject,
+        'email': email,
+        'name': name,
+    }
+    return render(request, 'dashboard/email_response.html', context) #eto yung wala mo kanina. kaya kahit ano
+#mangyare sa code ma rereceive nya is None kase walang return mismo ung Function
+#
+# bute sir need ng context pa kung may message data na po?
+# kase ung context need natin irender dun sa form na gngwa which is eto
 
 
 

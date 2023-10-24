@@ -1,3 +1,5 @@
+
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, ExpressionWrapper, F, Count, fields
 from django.db.models.functions import Now
@@ -49,10 +51,14 @@ def items(request):
     print(category_ids)
     for category_id in category_ids:
         test = category.filter(id=category_id)
+        # test2 = category.get(id=location_id)
         print(test)
 
     if category_ids:
         items = items.filter(category_id__in=category_ids)
+        # locations = locations.get(id__in=location_ids)
+
+
 
     # if category_ids:
     #     items = items.filter(category_id__in=category_ids)
@@ -64,6 +70,9 @@ def items(request):
 
     if location_ids:
         items = items.filter(created_by__profile__location_id__in=location_ids)
+
+
+        # items = locations.filter(id__in=location_ids)
 
     print(request.GET.get('min_value'))
     minValue = request.GET.get('min_value')
@@ -80,6 +89,17 @@ def items(request):
 
     if query:
         items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        # locations = locations.filter(Q(name__icontains=query))
+
+    # print(location_ids)
+    # for location_ids in location_ids:
+    #     test2 = locations.filter(id=location_ids)
+    #     print(test2)
+    # if location_ids:
+    #     locations.filter(id__in=location_ids)
+        # lo = items.filter(category_id__in=category_ids)
+
+
 
     return render(request, 'item/items.html', {
         'items': items,
@@ -91,6 +111,7 @@ def items(request):
         'min_price': min_price,
         'max_price': max_price,
         'test': category_ids,
+        # 'test2': location_ids,
     })
 
 
@@ -216,5 +237,6 @@ def deleteLocation(request, loc_id):
         location = get_object_or_404(Location, pk=loc_id)
         location.delete()
         return HttpResponseRedirect(reverse_lazy('item:items'))
+
 
 

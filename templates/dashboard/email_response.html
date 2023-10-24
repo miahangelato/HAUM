@@ -1,0 +1,33 @@
+<div class="container-xxl py-5">
+        <div class="container" style="display: flex; flex-direction: column; flex-wrap: wrap; align-content: center">
+            <div class="col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="bg-light rounded h-100 d-flex align-items-center p-5">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-12 col-sm-12">
+                                    <input type="text" disabled name="name" id="id_name" class="form-control border-0" value="{{ name }}" style="height: 55px;">
+                                </div>
+                                <div class="col-12 col-sm-12">
+                                    <input type="email" disabled name="email" id="id_email" class="form-control border-0" value="{{ email }}" style="height: 55px;">
+                                </div>
+                                <div class="col-12 col-sm-12">
+                                    <input type="text" disabled name="subject" id="id_subject" class="form-control border-0" value="{{ subject }}" style="height: 55px;">
+                                </div>
+
+                                <div class="col-12 col-sm-12">
+                                    <textarea name="message" id="id_message" class="form-control border-0" placeholder="Message" style="height: 150px;"></textarea>
+                                </div>
+                                <div class="col-12 col-sm-12">
+                                    <button class="btn btn-primary py-3 w-100" type="submit">Sign Up</button>
+                                </div>
+                                <div class="col-12 col-sm-12 d-flex justify-content-center">
+                                    <span class="nowrap" style="color: white">Already have an account? <a href="{% url 'login' %}" style="color: white; text-decoration: underline">Sign-in.</a> </span>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
