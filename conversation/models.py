@@ -11,7 +11,7 @@ class Conversation(models.Model):
     members = models.ManyToManyField(User, related_name='conversations')
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-
+    deleted_by = models.ManyToManyField(User, related_name='deleted_conversations')
     class Meta:
         ordering = ['-modified_at']
 

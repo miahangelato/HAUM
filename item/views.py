@@ -11,7 +11,7 @@ from django.views.generic import UpdateView
 from item.forms import NewItemForm, EditItemForm, CategoryForm, addCategory, addLocation, LocationForm
 from item.models import Item, Category, PriceRange
 from profile.models import Location
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def items(request):
     # print('asd')
@@ -51,25 +51,18 @@ def items(request):
     print(category_ids, location_ids)
     for category_id in category_ids:
         test = category.filter(id=category_id)
-        test2 = category.get(id=location_ids)
-        print(test,test2)
+        print(test)
 
     if category_ids:
         items = items.filter(category_id__in=category_ids)
-        locations = locations.get(id__in=location_ids)
 
+    location_objs = []
+    for location_id in location_ids:
+        test2 = locations.filter(id=location_id)
+        location_objs.extend(test2)
 
-
-    # if category_ids:
-    #     items = items.filter(category_id__in=category_ids)
-
-    # print(location_ids)
-    # for location_id in location_ids:
-    #     test = category.filter(id=location_id)
-    #     print(test)
-
-    if location_ids:
-        items = items.filter(created_by__profile__location_id__in=location_ids)
+    if location_objs:
+        items = items.filter(created_by__profile__location__in=location_objs)
 
 
         # items = locations.filter(id__in=location_ids)
@@ -100,6 +93,29 @@ def items(request):
         # lo = items.filter(category_id__in=category_ids)
 
 
+    items_per_page = 15# ADJUST NALANG IF ILAN GUSTO NIYO
+
+    # Create a Paginator object
+    paginator = Paginator(items, items_per_page)
+
+    # Get the page number from the request's GET parameters
+    page = request.GET.get('page')
+
+    try:
+        # Attempt to convert the page parameter to an integer
+        page = int(page)
+        if page < 1:
+            # If the page is negative or zero, redirect sa first page
+            items = paginator.get_page(1)
+        else:
+            # Get the Page object for the requested page
+            items = paginator.get_page(page)
+    except (ValueError, TypeError):
+        # Handle non-integer or missing page parameter by showing the first page
+        items = paginator.get_page(1)
+    except EmptyPage:
+        # If the page is out of range, for example 1000, REDIRECT LAST PAGE
+        items = paginator.get_page(paginator.num_pages)  # LAST PAGE NA AVAIL
 
     return render(request, 'item/items.html', {
         'items': items,
@@ -112,6 +128,7 @@ def items(request):
         'max_price': max_price,
         'test': category_ids,
         'test2': location_ids,
+
     })
 
 

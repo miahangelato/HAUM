@@ -18,7 +18,7 @@ from .forms import SignupForm
 from .models import Contact
 from .tokens import account_activation_token
 from verify_email.email_handler import send_verification_email
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.http import urlsafe_base64_encode
 from django.utils.http import urlsafe_base64_encode
 
@@ -27,6 +27,31 @@ def index(request):
     items = Item.objects.filter(is_sold=False)[0:6]
     user_color = request.session.get('user_color', None)
     categories = Category.objects.all()
+    items_per_page = 20  # ADJUST NALANG IF ILAN GUSTO NIYO
+
+    # Create a Paginator object
+    paginator = Paginator(items, items_per_page)
+
+    # Get the page number from the request's GET parameters
+    page = request.GET.get('page')
+
+    try:
+        # Attempt to convert the page parameter to an integer
+        page = int(page)
+        if page < 1:
+            # If the page is negative or zero, redirect sa first page
+            items = paginator.get_page(1)
+        else:
+            # Get the Page object for the requested page
+            items = paginator.get_page(page)
+    except (ValueError, TypeError):
+        # Handle non-integer or missing page parameter by showing the first page
+        items = paginator.get_page(1)
+    except EmptyPage:
+        # If the page is out of range, for example 1000, REDIRECT LAST PAGE
+        items = paginator.get_page(paginator.num_pages)  # LAST PAGE NA AVAIL
+
+
     context = {
         'items': items,
         'categories': categories,
