@@ -1,0 +1,1 @@
+web: gunicorn G4Marketplace.wsgi
