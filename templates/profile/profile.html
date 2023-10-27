@@ -14,230 +14,6 @@
         </div>
 
         <div class="bg-white p-8 rounded-lg shadow-lg mt-2 mb-2">
-{##}
-{#        {%if request.user.is_superuser  %}#}
-{#             <form method="POST" enctype="multipart/form-data" class="mt-4">#}
-{#                    {% csrf_token %}#}
-{##}
-{#                    <div class="mb-4">#}
-{#                        <p class="font-semibold">Upvotes: {{ user.profile.upvotes }}</p>#}
-{#                        <p class="font-semibold">Downvotes: {{ user.profile.downvotes }}</p>#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4 w-1/2">#}
-{#                        <label for="{{ u_form.username.id_for_label }}" class="block text-gray-600 font-medium">Username:</label>#}
-{#                        <input type="text" id="username" name="username"#}
-{#                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.username }}">#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4 w-1/2">#}
-{#                        <label for="{{ u_form.first_name.id_for_label }}" class="block text-gray-600 font-medium">First Name:</label>#}
-{#                        <input type="text" id="first_name" name="first_name"#}
-{#                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.first_name }}">#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4 w-1/2">#}
-{#                        <label for="{{ u_form.last_name.id_for_label }}" class="block text-gray-600 font-medium">Last Name:</label>#}
-{#                        <input type="text" id="last_name" name="last_name"#}
-{#                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.last_name }}">#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4 w-1/2">#}
-{#                        <label for="{{ p_form.location.id_for_label }}" class="block text-gray-600 font-medium">Location:</label>#}
-{#                        {{ p_form.location }}#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4 w-1/2">#}
-{#                        <label for="{{ p_form.address.id_for_label }}" class="block text-gray-600 font-medium">Address:</label>#}
-{#                        <input type="text" id="address" name="address"#}
-{#                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.address }}">#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4 w-1/2">#}
-{#                        <label for="{{ p_form.profile.bio.id_for_label }}" class="block text-gray-600 font-medium">Bio:</label>#}
-{#                        <textarea id="bio" name="bio"#}
-{#                                  class="border border-gray-300 p-2 rounded w-full" required rows="6">{{ user.profile.bio }}</textarea>#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4 w-1/2">#}
-{#                        <label for="{{ form.color.id_for_label }}">Choose a color:</label>#}
-{#                        <input type="color" id="color" name="color" value="{{ user.profile.color }}">#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4 w-1/2">#}
-{#                        {{ form.as_table }}#}
-{#                    </div>#}
-{##}
-{#                    <div class="mb-4 w-1/2">#}
-{#                        <label for="{{ p_form.image.id_for_label }}" class="block text-gray-600 font-medium">Profile Image:</label>#}
-{#                        <input type="file" id="profile-image" name="image" class="border border-gray-300 p-2 rounded w-full">#}
-{#                    </div>#}
-{##}
-{#                    <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8"#}
-{#                            style="background: {{ user.profile.color }}" type="submit">Update Profile</button>#}
-{#                    <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8"#}
-{#                            style="background: {{ user.profile.color }}" type="button" id="submit-button">#}
-{#                        <a href="{% url 'password_reset' %}" class="text-white">Change Password</a>#}
-{#                    </button>#}
-{##}
-{#                    <div>#}
-{#                        <label>Login History:</label>#}
-{#                            {% for foo in login_history %}#}
-{#                                {{ foo.ip }}#}
-{#                                {{ foo.user_agent }}#}
-{#                                {{ foo.date_time }}#}
-{#                            {% endfor %}#}
-{#                    </div>#}
-{#                </form>#}
-{##}
-{#         {% else %}#}
-{#                {% if user.username != request.user.username %}#}
-{#                    <div class="flex items-center mb-4">#}
-{#                        <!-- Upvote button -->#}
-{#                        <form method="post" action="{% url 'upvote' user.username %}">#}
-{#                            {% csrf_token %}#}
-{#                            <button type="submit" class="bg-green-600 text-white px-2 py-1 rounded-full flex items-center">#}
-{#                                Upvote <span class="ml-1 text-lg">&#9650;</span>#}
-{#                            </button>#}
-{#                            <span class="ml-2 text-sm">{{ profile.upvotes }} Upvotes</span>#}
-{#                        </form>#}
-{##}
-{#                        <!-- Downvote button -->#}
-{#                        <form method="post" action="{% url 'downvote' user.username %}">#}
-{#                            {% csrf_token %}#}
-{#                            <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded-full flex items-center ml-2">#}
-{#                                Downvote <span class="ml-1 text-lg">&#9660;</span>#}
-{#                            </button>#}
-{#                            <span class="ml-2 text-sm">{{ profile.downvotes }} Downvotes</span>#}
-{#                        </form>#}
-{#                    </div>#}
-{##}
-{#                    <div class="bg-gray-100 p-4 rounded-lg shadow-lg mb-5 border border-gray-300">#}
-{#                        <legend class="text-xl font-bold mb-3 text-gray-700">Profile Info</legend>#}
-{#                        <div class="text-gray-700">#}
-{#                            <div class="mb-2">#}
-{#                                <span class="font-semibold">Username:</span> {{ user.username }}#}
-{#                            </div>#}
-{##}
-{#                            <div>#}
-{#                                <p class="mb-2">#}
-{#                                    <span class="font-semibold">Name:</span> {{ profile.first_name }} {{ profile.last_name }}#}
-{#                                </p>#}
-{#                            </div>#}
-{##}
-{#                            <div class="mb-2">#}
-{#                                <span class="font-semibold">Email:</span> {{ user.email }}#}
-{#                            </div>#}
-{##}
-{#                            <div>#}
-{#                                <span class="font-semibold">Bio:</span> {{ profile.bio }}#}
-{#                            </div>#}
-{##}
-{#                            <div>#}
-{#                                <span class="font-semibold">Location:</span> {{ profile.location }}#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{##}
-{#                    {% if item %}#}
-{#                        <div class="grid grid-cols-3 gap-3 mt-5">#}
-{#                            {% for item in item %}#}
-{#                                <div class="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-300">#}
-{#                                    <a href="{% url 'item:detail' item.id %}">#}
-{#                                        <div class="flex flex-col h-full">#}
-{#                                            <div>#}
-{#                                                <img src="{{ item.image.url }}" class="rounded-t-xl">#}
-{#                                            </div>#}
-{#                                            <div class="p-6 bg-white rounded-b-xl">#}
-{#                                                <h2 class="text-2xl">{{ item.name }}</h2>#}
-{#                                                <p class="text-gray-500">Price: {{ item.price }}</p>#}
-{#                                                <p class="text-gray-500">Category: {{ item.category }}</p>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            {% endfor %}#}
-{#                        </div>#}
-{#                    {% endif %}#}
-{#                {% else %}#}
-{#                    <form method="POST" enctype="multipart/form-data" class="mt-4">#}
-{#                        {% csrf_token %}#}
-{##}
-{#                        <div class="mb-4">#}
-{#                            <p class="font-semibold">Upvotes: {{ user.profile.upvotes }}</p>#}
-{#                            <p class="font-semibold">Downvotes: {{ user.profile.downvotes }}</p>#}
-{#                        </div>#}
-{##}
-{#                        <div class="mb-4 w-1/2">#}
-{#                            <label for="{{ u_form.username.id_for_label }}" class="block text-gray-600 font-medium">Username:</label>#}
-{#                            <input type="text" id="username" name="username"#}
-{#                                   class="border border-gray-300 p-2 rounded w-full" required value="{{ user.username }}">#}
-{#                        </div>#}
-{##}
-{#                        <div class="mb-4 w-1/2">#}
-{#                            <label for="{{ u_form.first_name.id_for_label }}" class="block text-gray-600 font-medium">First Name:</label>#}
-{#                            <input type="text" id="first_name" name="first_name"#}
-{#                                   class="border border-gray-300 p-2 rounded w-full" required value="{{ user.first_name }}">#}
-{#                        </div>#}
-{##}
-{#                        <div class="mb-4 w-1/2">#}
-{#                            <label for="{{ u_form.last_name.id_for_label }}" class="block text-gray-600 font-medium">Last Name:</label>#}
-{#                            <input type="text" id="last_name" name="last_name"#}
-{#                                   class="border border-gray-300 p-2 rounded w-full" required value="{{ user.last_name }}">#}
-{#                        </div>#}
-{##}
-{#                        <div class="mb-4 w-1/2">#}
-{#                            <label for="{{ p_form.location.id_for_label }}" class="block text-gray-600 font-medium">Location:</label>#}
-{#                            {{ p_form.location }}#}
-{#                        </div>#}
-{##}
-{#                        <div class="mb-4 w-1/2">#}
-{#                            <label for="{{ p_form.address.id_for_label }}" class="block text-gray-600 font-medium">Address:</label>#}
-{#                            <input type="text" id="address" name="address"#}
-{#                                   class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.address }}">#}
-{#                        </div>#}
-{##}
-{#                        <div class="mb-4 w-1/2">#}
-{#                            <label for="{{ p_form.profile.bio.id_for_label }}" class="block text-gray-600 font-medium">Bio:</label>#}
-{#                            <textarea id="bio" name="bio"#}
-{#                                      class="border border-gray-300 p-2 rounded w-full" required rows="6">{{ user.profile.bio }}</textarea>#}
-{#                        </div>#}
-{##}
-{#                        <div class="mb-4 w-1/2">#}
-{#                            <label for="{{ form.color.id_for_label }}">Choose a color:</label>#}
-{#                            <input type="color" id="color" name="color" value="{{ user.profile.color }}">#}
-{#                        </div>#}
-{##}
-{#                        <div class="mb-4 w-1/2">#}
-{#                            {{ form.as_table }}#}
-{#                        </div>#}
-{##}
-{#                        <div class="mb-4 w-1/2">#}
-{#                            <label for="{{ p_form.image.id_for_label }}" class="block text-gray-600 font-medium">Profile Image:</label>#}
-{#                            <input type="file" id="profile-image" name="image" class="border border-gray-300 p-2 rounded w-full">#}
-{#                        </div>#}
-{##}
-{#                        <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8"#}
-{#                                style="background: {{ user.profile.color }}" type="submit">Update Profile</button>#}
-{#                        <button class="hover:bg-red-900 text-white font-semibold py-2 px-4 rounded w-1/8"#}
-{#                                style="background: {{ user.profile.color }}" type="button" id="submit-button">#}
-{#                            <a href="{% url 'password_reset' %}" class="text-white">Change Password</a>#}
-{#                        </button>#}
-{##}
-{#                        <div>#}
-{#                            <label>Login History:</label>#}
-{#                                {% for login_history in login_history %}#}
-{#                                    {{ login_history.ip }}#}
-{#                                    {{ login_history.user_agent }}#}
-{#                                    {{ login_history.date_time }}#}
-{#                                {% endfor %}#}
-{#                        </div>#}
-{#                    </form>#}
-{#                {% endif %}#}
-{#            {% endif %}#}
-{#        </div>#}
-{#    </div>#}
-{##}
             {% if user.username != request.user.username %}
                 <div class="flex items-center mb-4">
                     <!-- Upvote button -->
@@ -287,18 +63,18 @@
                 </div>
 
                 {% if item %}
-                    <div class="grid grid-cols-3 gap-3 mt-5">
+                    <div class="grid grid-cols-3 gap-3 flex space-x-4" style="margin-right: 20px; margin-left: 20px">
                         {% for item in item %}
-                            <div class="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-300">
+                            <div class="flex">
                                 <a href="{% url 'item:detail' item.id %}">
-                                    <div class="flex flex-col h-full">
+                                    <div class="bg-white rounded-lg overflow-hidden shadow-md flex">
                                         <div>
-                                            <img src="{{ item.image.url }}" class="rounded-t-xl">
+                                            <img src="{{ item.image.url }}" class="w-full h-full object-cover rounded-t-xl m-auto">
                                         </div>
-                                        <div class="p-6 bg-white rounded-b-xl">
-                                            <h2 class="text-2xl">{{ item.name }}</h2>
-                                            <p class="text-gray-500">Price: {{ item.price }}</p>
-                                            <p class="text-gray-500">Category: {{ item.category }}</p>
+                                        <div class="p-4">
+                                            <h2 class="text-lg font-bold uppercase">{{ item.name }}</h2>
+                                            <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
+                                            <p class="text-gray-500 text-sm">Category: {{ item.category.name }}</p>
                                         </div>
                                     </div>
                                 </a>
@@ -320,19 +96,22 @@
                     <div class="mb-4 w-1/2">
                         <label for="{{ u_form.username.id_for_label }}" class="block text-gray-600 font-medium">Username:</label>
                         <input type="text" id="username" name="username"
-                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.username }}">
+                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.username }}"
+                               placeholder="Username">
                     </div>
 
                     <div class="mb-4 w-1/2">
                         <label for="{{ u_form.first_name.id_for_label }}" class="block text-gray-600 font-medium">First Name:</label>
                         <input type="text" id="first_name" name="first_name"
-                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.first_name }}">
+                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.first_name }}"
+                               placeholder="First Name">
                     </div>
 
                     <div class="mb-4 w-1/2">
                         <label for="{{ u_form.last_name.id_for_label }}" class="block text-gray-600 font-medium">Last Name:</label>
                         <input type="text" id="last_name" name="last_name"
-                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.last_name }}">
+                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.last_name }}"
+                               placeholder="Last Name">
                     </div>
 
                     <div class="mb-4 w-1/2">
@@ -343,13 +122,15 @@
                     <div class="mb-4 w-1/2">
                         <label for="{{ p_form.address.id_for_label }}" class="block text-gray-600 font-medium">Address:</label>
                         <input type="text" id="address" name="address"
-                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.address }}">
+                               class="border border-gray-300 p-2 rounded w-full" required value="{{ user.profile.address }}"
+                               placeholder="Address">
                     </div>
 
                     <div class="mb-4 w-1/2">
                         <label for="{{ p_form.profile.bio.id_for_label }}" class="block text-gray-600 font-medium">Bio:</label>
                         <textarea id="bio" name="bio"
-                                  class="border border-gray-300 p-2 rounded w-full" required rows="6">{{ user.profile.bio }}</textarea>
+                                  class="border border-gray-300 p-2 rounded w-full" required rows="6"
+                                  placeholder="Add a Bio">{{ user.profile.bio }}</textarea>
                     </div>
 
                     <div class="mb-4 w-1/2">
@@ -373,12 +154,12 @@
                         <a href="{% url 'password_reset' %}" class="text-white">Change Password</a>
                     </button>
 
-                    <div>
-                        <label>Login History:</label>
+                    <div class="mt-10 bg-white p-10 rounded-xl shadow-xl">
+                        <label class="font-bold text-xl uppercase">Login History:</label><br><br>
                             {% for foo in login_history %}
+                                {{ foo.date_time }}<br>
                                 {{ foo.ip }}
-                                {{ foo.user_agent }}
-                                {{ foo.date_time }}
+                                {{ foo.user_agent }}<br><br>
                             {% endfor %}
                     </div>
                 </form>

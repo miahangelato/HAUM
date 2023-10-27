@@ -4,35 +4,34 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
-            <h2 class="mb-12 text-2xl text-center">Newest items</h2>
+        <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl shadow-xl">
+            <h2 class="mb-12 text-2xl text-center uppercase font-bold">Newest items</h2>
 
-            <div class="flex space-x-4"> <!-- Use flex class for horizontal layout -->
-                {% for item in items %}
-                    <div class="max-w-xs">
-                        <a href="{% url 'item:detail' item.id %}">
-                            <div class="bg-white rounded-lg overflow-hidden shadow-md">
-                                <img src="{{ item.image.url }}" class="w-full h-100 object-cover rounded-t-xl">
-                            </div>
-
-                            <div class="p-6 bg-white rounded-b-xl">
-                                <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                                src="{{ item.created_by.profile.image.url}}" alt="Bordered avatar" style="border: 2px solid {{ item.created_by.profile.color}};">
-                                <h2 class="text-xl font-bold uppercase">{{ item.name }}</h2>
-                                <p class="text-gray-500">Seller: {{ item.created_by }}</p>
-                                <p class="text-gray-500">Price: {{ item.price }}</p>
-                                <p class="text-gray-500">Category: {{ item.category }}</p>
-                                <p class="text-gray-500">Upvotes: {{ item.created_by.profile.upvotes }}</p>
-                                <p class="text-gray-500">Downvotes: {{ item.created_by.profile.downvotes }}</p>
-                            </div>
-                        </a>
-                    </div>
-                {% endfor %}
+            <div class="col-span-3 flex space-x-2" style="margin-right: 20px; margin-left: 20px">
+                <div class="grid grid-cols-5 gap-3">
+                    {% for item in items %}
+                        <div class="flex">
+                            <a href="{% url 'item:detail' item.id %}">
+                                <div class="bg-white rounded-lg overflow-hidden shadow-md flex">
+                                    <img src="{{ item.image.url }}" class="w-32 h-32 object-cover rounded-t-xl m-auto p-2">
+                                    <div class="p-4">
+                                        <h2 class="text-lg font-bold uppercase">{{ item.name }}</h2>
+                                        <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
+                                        <p class="text-gray-500 text-sm">Category: {{ item.category.name }}</p>
+                                        <p class="text-gray-500 text-sm">Location: {{ item.created_by.profile.location.name }}</p>
+                                        <p class="text-gray-500 text-sm">Upvotes: {{ item.created_by.profile.upvotes }}</p>
+                                        <p class="text-gray-500 text-sm">Downvotes: {{ item.created_by.profile.downvotes }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
         <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
-            <h2 class="mb-12 text-2xl text-center">Categories</h2>
+            <h2 class="mb-12 text-2xl text-center uppercase font-bold">Categories</h2>
 
             <div class="flex space-x-4"> <!-- Use flex class for horizontal layout -->
                 {% for category in categories %}

@@ -205,6 +205,7 @@ def request_new_activation_link(request):
     return render(request, 'core/request_activation_link.html')
 
 
+
 def logout(request):
     return redirect(request, 'core/login.html')
 

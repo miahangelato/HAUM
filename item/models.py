@@ -35,6 +35,7 @@ class Item(models.Model):
         if self.price is not None and self.price < 0:
             raise ValidationError("Price cannot be negative.")
 
+
 class PriceRange(models.Model):
     name = models.CharField(max_length=255)
     min_price = models.FloatField()

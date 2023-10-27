@@ -11,7 +11,7 @@
 {#            {{ test2 }}#}
 
                 <!-- Category filter -->
-                <p class="font-semibold text-xl ml-2" style="margin-top: 10px">Categories</p>
+                <p class="font-semibold text-xl ml-2 uppercase" style="margin-top: 10px">Categories</p>
                 {% if request.user.is_superuser %}
 {#                    tanggal din form kase nasasama yon sa submit#}
                     <a href="{% url 'item:add_category' %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">Add Category</a>
@@ -35,7 +35,7 @@
                 </ul>
 
                 <!-- Price Range filter -->
-                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">PRICE RANGE</p>
+                <p class="font-semibold text-xl ml-2 uppercase" style="margin-top: 30px">PRICE RANGE</p>
                 <ul>
                     <div class="flex space-x-2 ml-3" style="margin-top: 10px">
                         <label for="MinPrice">Min Price:</label>
@@ -58,7 +58,7 @@
 
 
                 <!-- Vote Filters -->
-                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">VOTE FILTERS</p>
+                <p class="font-semibold text-xl ml-2 uppercase" style="margin-top: 30px">VOTE FILTERS</p>
                 <ul>
                     <li class="py-2 px-2 rounded-xl ml-3">
                         <input type="checkbox" name="upvoted" id="upvoted-checkbox" {% if request.GET.upvoted %}checked{% endif %}>
@@ -73,7 +73,7 @@
 
 
 
-                <p class="font-semibold text-xl ml-2" style="margin-top: 30px">LOCATION</p>
+                <p class="font-semibold text-xl ml-2 uppercase" style="margin-top: 30px">LOCATION</p>
                 {% if request.user.is_superuser %}
 {#                    tanggal form kase nasasama yon sa submit#}
                     <a href="{% url 'item:add_location' %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">Add Location</a>
@@ -118,7 +118,7 @@
                     <div class="flex">
                         <a href="{% url 'item:detail' item.id %}">
                             <div class="bg-white rounded-lg overflow-hidden shadow-md flex">
-                                <img src="{{ item.image.url }}" class="w-32 h-32 object-cover rounded-t-xl m-auto">
+                                <img src="{{ item.image.url }}" class="w-32 h-32 object-cover rounded-t-xl m-auto p-2">
                                 <div class="p-4">
                                     <h2 class="text-lg font-bold uppercase">{{ item.name }}</h2>
                                     <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
