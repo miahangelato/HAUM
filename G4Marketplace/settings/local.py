@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     #'bootstrap5',
     'login_history',
-    'colorfield'
+    'colorfield',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -112,7 +113,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Replace with your desired static files directory
+    os.path.join(BASE_DIR, 'static_my_project'),  # Replace with your desired static files directory
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
@@ -120,6 +121,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media_root')
+
+from G4Marketplace.aws.conf import *
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -143,3 +146,12 @@ EMAIL_USE_TLS = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+# import dj_database_url
+# db_from_env = dj_database_url.config()
+# DATABASES['default'].update(db_from_env)
+# DATABASES['default']['CONN_MAX_AGE'] = 500
+
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+# ]

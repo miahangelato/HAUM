@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     #'bootstrap5',
     'login_history',
-    'colorfield'
+    'colorfield',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -148,3 +149,7 @@ EMAIL_USE_TLS = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+# ]

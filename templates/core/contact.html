@@ -14,7 +14,8 @@
                         <p><strong>Subject:</strong> {{ contact.subject }}</p>
                         <p><strong>Message:</strong> {{ contact.comment }}</p>
                         <a href="{% url 'send_email' contact.subject contact.email contact.name %}">
-                            <button class="bg-red-800 hover:bg-red-900 text-white py-2 px-4 rounded-lg mt-2" style="background: {{ user.profile.color }}">Respond</button>
+                            <button class="bg-red-800 hover:bg-red-900 text-white py-2 px-4 rounded-lg mt-2"
+                                    style="background: {{ user.profile.color }}">Respond</button>
                         </a>
                     </div>
                 {% endfor %}
@@ -42,7 +43,8 @@
 
                         <div class="mb-4">
                             <label for="comment" class="block text-gray-600 text-md font-semibold">LEAVE A COMMENT</label>
-                            <textarea class="w-full py-2 px-3 border rounded-lg" id="comment" name="comment" placeholder="Leave a Comment Here" style="height: 100px" required></textarea>
+                            <textarea class="w-full py-2 px-3 border rounded-lg" id="comment" name="comment" placeholder="Leave a Comment Here"
+                                      style="height: 100px" required></textarea>
                         </div>
 
                         <button type="submit" class="w-full py-2 px-4 text-white rounded-lg bg-red-800 hover:bg-red-700">SUBMIT</button>
