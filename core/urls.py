@@ -3,7 +3,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from core import views
 from .forms import LoginForm
-from .views import request_new_activation_link, login_required_redirect, send_email
+from .views import request_new_activation_link, send_email
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -12,7 +12,8 @@ urlpatterns = [
     path('terms_of_use/', views.terms_of_use, name='terms_of_use'),
     path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
     path('signup/', views.signup, name='signup'),
-    path('login/', login_required_redirect(auth_views.LoginView.as_view(template_name='core/login.html',authentication_form=LoginForm)), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='core/login.html',authentication_form=LoginForm), name='login'),
+    # path('login/', auth_views.LoginView.as_view(template_name='core/login.html', authentication_form=LoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
 

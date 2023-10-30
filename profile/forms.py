@@ -20,17 +20,17 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['bio', 'address', 'location', 'image', 'color', 'font_preference']
 
-    def save(self, commit=True):
-        profile = super(ProfileUpdateForm, self).save(commit=False)
-        user = profile.user
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
-
-        if commit:
-            user.save()
-            profile.save()
-
-        return profile
+    # def save(self, commit=True):
+    #     profile = super(ProfileUpdateForm, self).save(commit=False)
+    #     user = profile.user
+    #     user.first_name = self.cleaned_data['first_name']
+    #     user.last_name = self.cleaned_data['last_name']
+    #
+    #     if commit:
+    #         user.save()
+    #         profile.save()
+    #
+    #     return profile
 
 
 #Color Preference Form can be deleted since the color field is already in the ProfileUpdateForm

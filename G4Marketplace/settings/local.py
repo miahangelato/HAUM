@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     #'bootstrap5',
     'login_history',
     'colorfield',
-    'storages'
+    # 'storages'
 ]
 
 MIDDLEWARE = [
@@ -151,7 +151,16 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 # db_from_env = dj_database_url.config()
 # DATABASES['default'].update(db_from_env)
 # DATABASES['default']['CONN_MAX_AGE'] = 500
-
+#
 # AUTHENTICATION_BACKENDS = [
 #     'django.contrib.auth.backends.ModelBackend',
 # ]
+CORS_REPLACE_HTTPS_REFERER      = False
+HOST_SCHEME                     = "http://"
+SECURE_PROXY_SSL_HEADER         = None
+SECURE_SSL_REDIRECT             = False
+SESSION_COOKIE_SECURE           = False
+CSRF_COOKIE_SECURE              = False
+SECURE_HSTS_SECONDS             = None
+SECURE_HSTS_INCLUDE_SUBDOMAINS  = False
+SECURE_FRAME_DENY               = False

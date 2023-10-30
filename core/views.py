@@ -235,17 +235,3 @@ def logout(request):
     return redirect(request, 'core/login.html')
 
 
-
-
-
-
-
-def login_required_redirect(function):
-    def wrap(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('index')
-        else:
-            return function(request, *args, **kwargs)
-    return wrap
-
-

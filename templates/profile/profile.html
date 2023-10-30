@@ -156,12 +156,36 @@
 
                     <div class="mt-10 bg-white p-10 rounded-xl shadow-xl">
                         <label class="font-bold text-xl uppercase">Login History:</label><br><br>
-                            {% for foo in login_history %}
-                                {{ foo.date_time }}<br>
-                                {{ foo.ip }}
-                                {{ foo.user_agent }}<br><br>
+                        <ul>
+                            {% for entry in login_history_page %}
+                                <li>
+                                    {{ entry.date_time|date:"M. d, Y, g:i A" }}<br>
+                                    {{ entry.ip }}<br>
+                                    {{ entry.user_agent }}<br><br>
+                                </li>
                             {% endfor %}
-                    </div>
+                        </ul>
+
+                            <div class="pagination">
+                                <span class="step-links">
+                                    {% if login_history_page.has_previous %}
+                                        <a href="?page=1">&laquo; first</a>
+                                        <a href="?page={{ login_history_page.previous_page_number }}">previous</a>
+                                    {% endif %}
+
+                                    <span class="current-page">
+                                        Page {{ login_history_page.number }} of {{ login_history_page.paginator.num_pages }}.
+                                    </span>
+
+                                    {% if login_history_page.has_next %}
+                                        <a href="?page={{ login_history_page.next_page_number }}">next</a>
+                                        <a href="?page={{ login_history_page.paginator.num_pages }}">last &raquo;</a>
+                                    {% endif %}
+                                </span>
+                            </div>
+                  </div>
+
+
                 </form>
             {% endif %}
         </div>
