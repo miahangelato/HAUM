@@ -23,6 +23,11 @@ def create_profile(sender, instance, created, **kwargs):
 #         """
 #         instance.profile.save()
 
+@receiver(post_save, sender=User)
+def save_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
 
 
 #This code defines a signal handler function named save_profile that automatically saves the associated Profile object whenever a User object is saved.

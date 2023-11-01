@@ -16,7 +16,7 @@
 
                         <div class="p-6 bg-white rounded-b-xl">
                             <h2 class="text-2xl">{{ item.name }}</h2>
-                            <p class="text-gray-500">Price: {{ item.price }}</p>
+                            <p class="text-gray-500">₱{{ item.price }}</p>
                         </div>
                     </a>
                 </div>
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-      <!-- Pagination -->
+            {#------------------PAGINATION------------------#}
             <div class="mt-8 flex justify-center items-center">
                 <div class="pagination flex items-center space-x-4">
                     {% if items.has_previous %}
@@ -44,6 +44,7 @@
                     {% endif %}
                 </div>
             </div>
+            {#------------------PAGINATION------------------#}
 
     {% if request.user.is_superuser %}
         <table class="border border-collapse w-full md:w-3/4 xl:w-1/2 mx-auto">

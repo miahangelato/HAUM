@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from item.models import Item
 from profile.forms import UserUpdateForm, ProfileUpdateForm, ColorPreferenceForm, FontPreferenceForm
 from profile.models import Profile, UserVote, Location
-from .models import LoginHistory # Import your LoginHistory model
+# from .models import LoginHistory # Import your LoginHistory model
 
 
 @login_required
@@ -164,44 +164,44 @@ def downvote(request, username):
  # Import your LoginHistory model
 
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import LoginHistory  # Import your LoginHistory model
+# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+# from .models import LoginHistory  # Import your LoginHistory model
+#
+# from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+# from .models import LoginHistory  # Import your LoginHistory model
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from .models import LoginHistory  # Import your LoginHistory model
-
-def user_profile(request):
-    login_history = LoginHistory.objects.filter(user=request.user).order_by('-date_time')
-
-    # Number of items to display per page
-    items_per_page = 5
-
-    # Create a Paginator object
-    paginator = Paginator(login_history, items_per_page)
-
-    # Get the page number from the request's GET parameters
-    page = request.GET.get('page')
-
-    try:
-        # Attempt to convert the page parameter to an integer
-        page = int(page)
-    except (ValueError, TypeError):
-        # Handle non-integer or missing page parameter by showing the first page
-        page = 1
-
-    try:
-        # Get the Page object for the requested page
-        login_history = paginator.page(page)
-    except PageNotAnInteger:
-        # If the page is not an integer, show the first page
-        login_history = paginator.page(1)
-    except EmptyPage:
-        # If the page is out of range, for example, 1000, redirect to the last page
-        login_history = paginator.page(paginator.num_pages)
-
-    return render(request, 'profile.html', {'login_history': login_history})
-
-
-
-
+# def user_profile(request):
+#     login_history = LoginHistory.objects.filter(user=request.user).order_by('-date_time')
+#
+#     # Number of items to display per page
+#     items_per_page = 5
+#
+#     # Create a Paginator object
+#     paginator = Paginator(login_history, items_per_page)
+#
+#     # Get the page number from the request's GET parameters
+#     page = request.GET.get('page')
+#
+#     try:
+#         # Attempt to convert the page parameter to an integer
+#         page = int(page)
+#     except (ValueError, TypeError):
+#         # Handle non-integer or missing page parameter by showing the first page
+#         page = 1
+#
+#     try:
+#         # Get the Page object for the requested page
+#         login_history = paginator.page(page)
+#     except PageNotAnInteger:
+#         # If the page is not an integer, show the first page
+#         login_history = paginator.page(1)
+#     except EmptyPage:
+#         # If the page is out of range, for example, 1000, redirect to the last page
+#         login_history = paginator.page(paginator.num_pages)
+#
+#     return render(request, 'profile.html', {'login_history': login_history})
+#
+#
+#
+#
 

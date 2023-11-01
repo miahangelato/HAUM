@@ -63,5 +63,5 @@ class UserVote(models.Model):
 # class LoginHistory:
 #     pass
 
-class LoginHistory:
-    pass
+# class LoginHistory:
+#     pass

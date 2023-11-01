@@ -1,5 +1,3 @@
-
-
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, ExpressionWrapper, F, Count, fields
 from django.db.models.functions import Now
@@ -11,7 +9,8 @@ from django.views.generic import UpdateView
 from item.forms import NewItemForm, EditItemForm, CategoryForm, addCategory, addLocation, LocationForm
 from item.models import Item, Category, PriceRange
 from profile.models import Location
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage
+
 
 def items(request):
     # print('asd')
@@ -42,9 +41,7 @@ def items(request):
 
     # To implement "Most Upvoted" sorting with recency:
     if upvoted:
-        items = items.order_by('-upvotes_count', 'age')  # Sort by most upvoted items with recency
-    # elif most_downvoted:
-    #     items = items.order_by('-downvotes_count')  # Sort by most downvoted items
+        items = items.order_by('-upvotes_count', 'age')
     else:
         items = items.order_by('-upvotes_count')  # Default to sorting by most upvoted items
 
@@ -82,16 +79,6 @@ def items(request):
 
     if query:
         items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
-        # locations = locations.filter(Q(name__icontains=query))
-
-    # print(location_ids)
-    # for location_ids in location_ids:
-    #     test2 = locations.filter(id=location_ids)
-    #     print(test2)
-    # if location_ids:
-    #     locations.filter(id__in=location_ids)
-        # lo = items.filter(category_id__in=category_ids)
-
 
     items_per_page = 15# ADJUST NALANG IF ILAN GUSTO NIYO
 
@@ -197,6 +184,7 @@ def EditItem(request, pk):
             'title': 'Edit Item'
         })
 
+
 def add_categories(request):
     if request.method == 'POST':
         form = addCategory(request.POST, request.FILES)  # Use 'form' instead of 'forms'
@@ -214,17 +202,20 @@ def add_categories(request):
         'form': form,
     })
 
+
 class CategoryUpdateView(UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = 'item/edit_category.html'
     success_url = reverse_lazy('item:items')
 
+
 def deleteCategory(request, cat_id):
     if request.user.is_superuser:
         category = get_object_or_404(Category, pk=cat_id)
         category.delete()
         return HttpResponseRedirect(reverse_lazy('item:items'))
+
 
 def add_location(request):
     if request.method == 'POST':
@@ -243,17 +234,16 @@ def add_location(request):
         'form': form,
     })
 
+
 class LocationUpdateView(UpdateView):
     model = Location
     form_class = LocationForm
     template_name = 'item/edit_location.html'
     success_url = reverse_lazy('item:items')
 
+
 def deleteLocation(request, loc_id):
     if request.user.is_superuser:
         location = get_object_or_404(Location, pk=loc_id)
         location.delete()
         return HttpResponseRedirect(reverse_lazy('item:items'))
-
-
-

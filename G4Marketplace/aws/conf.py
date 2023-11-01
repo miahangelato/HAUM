@@ -1,8 +1,8 @@
 import datetime
 AWS_GROUP_NAME = "HAUM_USER_GROUP"
 AWS_USERNAME = "haum"
-AWS_ACCESS_KEY_ID = "AKIAQR3FWRV63KBMU5HG"
-AWS_SECRET_ACCESS_KEY = "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"
+AWS_ACCESS_KEY_ID = "AKIAQR3FWRV6QVVHMQH5"
+AWS_SECRET_ACCESS_KEY = "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"
 
 AWS_FILE_EXPIRE = 200
 AWS_PRELOAD_METADATA = True
@@ -26,3 +26,5 @@ AWS_HEADERS = {
     'Expires': expires,
     'Cache-Control': 'max-age=%d' % (int(two_months.total_seconds()), ),
 }
+
+AUTH_PASSWORD_VALIDATORS = True

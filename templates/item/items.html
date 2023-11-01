@@ -3,18 +3,17 @@
 {% block title %}Items{% endblock title %}
 
 {% block content %}
-    <div class="pb-6 grid grid-cols-4 gap-4 bg-gray-100">
+    <div class="pb-9 grid grid-cols-4 gap-4 bg-gray-100 rounded-lg">
         <div class ="col-span-1" style="margin-left: 10px">
             <form method="get" action="{% url 'item:items' %}">
                 <input name="query" class="w-full py-4 px-6 border rounded-xl"
                        style="margin-top: 10px;" type="text" value="{{ query }}" placeholder="Search for items">
-{#            {{ test2 }}#}
+
 
                 <!-- Category filter -->
                 <p class="font-semibold text-xl ml-2 uppercase" style="margin-top: 10px">Categories</p>
                 {% if request.user.is_superuser %}
-{#                    tanggal din form kase nasasama yon sa submit#}
-                    <a href="{% url 'item:add_category' %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">Add Category</a>
+                    <a href="{% url 'item:add_category' %}" class="btn btn-sm btn-primary ml-5" style="color: #0a53be" role="button">Add Category</a>
                 {% endif %}
                 <ul>
                     {% for category in category %}
@@ -48,15 +47,6 @@
                     </div>
                 </ul>
 
-{#                    {% for price_range in price_ranges %}#}
-{#                        <li class="py-2 px-2 rounded-xl">#}
-{#                            <input type="checkbox" name="price_ranges" value="{{ price_range.id }}" id="price_range_{{ price_range.id }}"#}
-{#                                   {% if price_range.id|stringformat:"s" in request.GET.price_ranges %}checked{% endif %}>#}
-{#                            <label for="price_range_{{ price_range.id }}">{{ price_range.name }}</label>#}
-{#                        </li>#}
-{#                    {% endfor %}#}
-
-
                 <!-- Vote Filters -->
                 <p class="font-semibold text-xl ml-2 uppercase" style="margin-top: 30px">VOTE FILTERS</p>
                 <ul>
@@ -70,13 +60,13 @@
 {#                    </li>#}
                 </ul>
 
-
-
-
+                <!-- Location filter -->
                 <p class="font-semibold text-xl ml-2 uppercase" style="margin-top: 30px">LOCATION</p>
                 {% if request.user.is_superuser %}
-{#                    tanggal form kase nasasama yon sa submit#}
-                    <a href="{% url 'item:add_location' %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">Add Location</a>
+                    <a href="{% url 'item:add_location' %}"
+                       class="btn btn-sm btn-primary ml-5 mb-10" style="color: #0a53be" role="button">
+                        Add Location
+                    </a>
                 {% endif %}
                 <ul>
                     {% for location in location %}
@@ -84,32 +74,26 @@
                             <input type="checkbox" name="locations" value="{{ location.id }}" id="location_{{ location.id }}"
                                    {% if location.id|stringformat:"s" in test2 %}checked{% endif %}>
                             <label for="location_{{ location.id }}">{{ location.name }}</label>
+
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'item:edit_location' location.id %}"
+                                   class="btn btn-sm btn-primary" style="color: #0a53be" role="button">
+                                    Edit
+                                </a>
+                                <a href="{% url 'item:deleteLocation' location.id %}"
+                                   class="btn btn-sm btn-primary" style="color: #0a53be" role="button">
+                                    Delete
+                                </a>
+                            {% endif %}
                         </li>
-                        {% if request.user.is_superuser %}
-                            <a href="{% url 'item:edit_location' location.id %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">
-                                Edit
-                            </a>
-                            <a href="{% url 'item:deleteLocation' location.id %}" class="btn btn-sm btn-primary" style="color: #0a53be" role="button">
-                                Delete
-                            </a>
-                        {% endif %}
                     {% endfor %}
                 </ul>
-{##}
+
                 <div class="flex space-x-2 ml-2" style="margin-top: 10px;">
                     <button class="py-4 px-8 text-lg text-white rounded-xl ml-3" style="background: {{ user.profile.color }}" type="submit">Search</button>
                     <a href="{% url 'item:items' %}" class="py-4 px-8 text-lg text-white rounded-xl" style="background: {{ user.profile.color }}">Clear all filters</a>
                 </div>
             </form>
-
-{#            <ul>#}
-{#                <li class="rounded-xl">#}
-{#                    <a href="{% url 'item:items' %}"#}
-{#                       class="mt-2 py-4 px-8 inline-block text-lg rounded-xl text-white"#}
-{#                       style="background: {{ user.profile.color }}; margin-left: 170px">Clear all filters</a>#}
-{#                </li>#}
-{#            </ul>#}
-
         </div>
 
         <div class="col-span-3" style="margin-top: 10px; margin-right: 20px">
@@ -136,26 +120,25 @@
 
     </div>
 
-                <!-- Pagination -->
-            <div class="mt-8 flex justify-center items-center">
-                <div class="pagination flex items-center space-x-4">
-                    {% if items.has_previous %}
-                        <a href="?page=1" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">First</a>
-                        <a href="?page={{ items.previous_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Previous</a>
-                    {% endif %}
-                    <ul class="flex space-x-2">
-                        {% for page in items.paginator.page_range %}
-                            <li>
-                                <a href="?page={{ page }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">{{ page }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    {% if items.has_next %}
-                        <a href="?page={{ items.next_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Next</a>
-                        <a href="?page={{ items.paginator.num_pages }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Last</a>
-                    {% endif %}
-                </div>
-            </div>
-
+    <!-- Pagination -->
+    <div class="flex justify-center items-center pb-3 bg-gray-100">
+        <div class="pagination flex items-center space-x-4">
+            {% if items.has_previous %}
+                <a href="?page=1" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">First</a>
+                <a href="?page={{ items.previous_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Previous</a>
+            {% endif %}
+            <ul class="flex space-x-2">
+                {% for page in items.paginator.page_range %}
+                    <li>
+                        <a href="?page={{ page }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">{{ page }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if items.has_next %}
+                <a href="?page={{ items.next_page_number }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Next</a>
+                <a href="?page={{ items.paginator.num_pages }}" class="text-gray-500 text-lg hover:text-orange-500 hover:bg-gray-200">Last</a>
+            {% endif %}
+        </div>
+    </div>
 
 {% endblock content %}
