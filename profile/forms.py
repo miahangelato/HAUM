@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 
 
@@ -10,8 +9,7 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username']
 
-# form eto para ma change update yung user profile mo
-#GINALAW
+
 class ProfileUpdateForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
@@ -33,19 +31,20 @@ class ProfileUpdateForm(forms.ModelForm):
         return profile
 
 
-#Color Preference Form can be deleted since the color field is already in the ProfileUpdateForm
-class ColorPreferenceForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['color']
-
-
 class FontPreferenceForm(forms.ModelForm):
     FONT_CHOICES = (
+        ('Default', 'Default'),
+        ('Open Sans', 'Open Sans'),
         ('Young Serif', 'Young Serif'),
         ('Roboto Slab', 'Roboto Slab'),
+        ('Roboto Mono', 'Roboto Mono'),
         ('Noto Sans JP', 'Noto Sans JP'),
         ('Yuji Hentaigana Akari', 'Yuji Hentaigana Akari'),
+        ('Agbalumo', 'Agbalumo'),
+        ('Alegreya Sans', 'Alegreya Sans'),
+        ('Montserrat', 'Montserrat'),
+        ('Edu TAS Begginer', 'Edu TAS Begginer'),
+        ('Playpen Sans', 'Playpen Sans'),
     )
     # Replaced the font field with choices added new font option
 

@@ -1,8 +1,5 @@
 from django.db import models
-from django.forms import TextInput
 from django.utils import timezone
-
-from dashboard import admin
 
 
 # Create your models here.
@@ -15,12 +12,3 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
-
-#
-# class LoginHistoryAdmin(admin.ModelAdmin):
-#     list_display = ('user', 'login_time', 'logout_time')
-#     list_filter = ('user', 'login_time')
-#
-#
-# class LoginHistory:
-#     pass

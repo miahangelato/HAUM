@@ -1,4 +1,3 @@
-import self
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django_registration.forms import User
@@ -12,13 +11,12 @@ class LoginForm(AuthenticationForm):
         'class': 'w-full py-4 px-6 rounded-xl'
     }))
 
-    # password = forms.CharField(widget=forms.TextInput(attrs={
-    #     'placeholder': 'Password',
-    #     'class': 'w-full py-4 px-6 rounded-xl'
-    # }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'placeholder': 'Password',
+        'class': 'w-full py-4 px-6 rounded-xl'
+    }))
 
 
-#GINALAW
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
@@ -82,16 +80,8 @@ class SignupForm(UserCreationForm):
 
         return username
 
+
 class Contact(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ['name', 'email', 'subject', 'comment']
-
-#
-# class newLink (forms.ModelForm):
-#
-#     class Meta:
-#         model = User
-#         fields = ['newLink']
-
-

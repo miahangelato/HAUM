@@ -1,21 +1,16 @@
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator
-from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
 from item.models import Item
-from profile.forms import UserUpdateForm, ProfileUpdateForm, ColorPreferenceForm, FontPreferenceForm
+from profile.forms import UserUpdateForm, ProfileUpdateForm, FontPreferenceForm
 from profile.models import Profile, UserVote, Location
-# from .models import LoginHistory # Import your LoginHistory model
 
 
 @login_required
 def profile(request, username):
     user = User.objects.get(username=username)
     profile = Profile.objects.get(user=user)
-    color_form = ColorPreferenceForm(instance=profile)
     locations = Location.objects.all()
     font_form = FontPreferenceForm(instance=request.user.profile)
     login_history = user.active_logins
@@ -24,17 +19,15 @@ def profile(request, username):
     if request.method == 'POST':
         print("post method")
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES,
-                                   instance=request.user.profile)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         font_form = FontPreferenceForm(request.POST, instance=request.user.profile)
         if u_form.is_valid() and p_form.is_valid() and font_form.is_valid():
-            # request.user.save()
+
             print("valid form")
             u_form.save()
             p_form.save()
             font_form.save()
-            # # profile.color = form.cleaned_data['color']
-            # color_form.save()
+
             messages.success(request, f'Your account has been updated!')
             return redirect('profile', request.user.username)
     else:
@@ -42,6 +35,7 @@ def profile(request, username):
         form = FontPreferenceForm(instance=request.user.profile)
         profile = Profile.objects.get(user=user)
         print(user.first_name)
+        print(user.last_name)
         print(profile.first_name)
         u_form = UserUpdateForm(instance=user)
         p_form = ProfileUpdateForm(instance=profile)
@@ -67,21 +61,15 @@ def profile(request, username):
         'item': item,
         'is_own_profile': is_own_profile,
         'user_profile_color': user_profile_color,
-
         # Instantiating the font_form in the start of the function
         'form': font_form,
-
         'locations': locations,
-        'color_form': color_form,
         'login_history': login_history
-
     }
 
     return render(request, 'profile/profile.html', context)
 
 
-# GINALAW NO VOTE OWN
-# Upvote view
 @login_required
 def upvote(request, username):
     user = request.user  # The user who is upvoting (logged-in user)
@@ -121,7 +109,6 @@ def upvote(request, username):
     return redirect('profile', username=username)  # Redirect to the profile page of the user who is being upvoted
 
 
-# Downvote view
 @login_required
 def downvote(request, username):
     user = request.user
@@ -159,49 +146,3 @@ def downvote(request, username):
         messages.success(request, f'You have downvoted {target_user.username}!')
 
     return redirect('profile', username=username)
-
-
- # Import your LoginHistory model
-
-
-# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-# from .models import LoginHistory  # Import your LoginHistory model
-#
-# from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-# from .models import LoginHistory  # Import your LoginHistory model
-
-# def user_profile(request):
-#     login_history = LoginHistory.objects.filter(user=request.user).order_by('-date_time')
-#
-#     # Number of items to display per page
-#     items_per_page = 5
-#
-#     # Create a Paginator object
-#     paginator = Paginator(login_history, items_per_page)
-#
-#     # Get the page number from the request's GET parameters
-#     page = request.GET.get('page')
-#
-#     try:
-#         # Attempt to convert the page parameter to an integer
-#         page = int(page)
-#     except (ValueError, TypeError):
-#         # Handle non-integer or missing page parameter by showing the first page
-#         page = 1
-#
-#     try:
-#         # Get the Page object for the requested page
-#         login_history = paginator.page(page)
-#     except PageNotAnInteger:
-#         # If the page is not an integer, show the first page
-#         login_history = paginator.page(1)
-#     except EmptyPage:
-#         # If the page is out of range, for example, 1000, redirect to the last page
-#         login_history = paginator.page(paginator.num_pages)
-#
-#     return render(request, 'profile.html', {'login_history': login_history})
-#
-#
-#
-#
-
