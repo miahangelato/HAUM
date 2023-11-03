@@ -193,3 +193,9 @@ def login_required_redirect(function):
             return function(request, *args, **kwargs)
     return wrap
 
+def delete_contact(request, contact_id):
+    contact = Contact.objects.filter(pk=contact_id).first()
+    if contact is not None:
+        contact.delete()
+    return redirect('/contact')
+
